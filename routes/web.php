@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +19,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+// Product Management
+Route::resource('products', ProductController::class);
+
+// Purchase Transactions
+Route::resource('purchases', PurchaseController::class);
+
+// Sales Transactions
+Route::resource('sales', SaleController::class);
+
+// Reports
+Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+
+// User Management
+Route::resource('users', UserController::class);
