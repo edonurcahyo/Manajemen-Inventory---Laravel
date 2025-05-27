@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchase;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
@@ -10,7 +11,8 @@ class PurchaseController extends Controller
     public function index()
     {
         $purchases = Purchase::all();
-        return view('purchases.index', compact('purchases'));
+        $suppliers = Supplier::all();
+        return view('purchases.index', compact('purchases', 'suppliers'));
     }
 
     public function create()

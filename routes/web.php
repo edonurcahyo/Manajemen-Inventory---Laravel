@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
@@ -20,6 +21,9 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+// Category Management
+Route::resource('categories', CategoryController::class);
 
 // Product Management
 Route::resource('products', ProductController::class);

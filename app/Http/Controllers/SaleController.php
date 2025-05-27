@@ -9,7 +9,7 @@ class SaleController extends Controller
 {
     public function index()
     {
-        $sales = Sale::all();
+        $sales = Sale::paginate(10); // or any number per page
         return view('sales.index', compact('sales'));
     }
 
