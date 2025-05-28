@@ -115,7 +115,7 @@
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Low Stock Alert</h5>
-                <a href="{{ route('products.index') }}" class="btn btn-sm btn-outline-warning">View Products</a>
+                <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">View Categories</a>
             </div>
             <div class="card-body">
                 @forelse($lowStockProducts ?? [] as $product)

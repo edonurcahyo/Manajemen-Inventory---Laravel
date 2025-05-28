@@ -55,8 +55,8 @@
                                         </a>
                                         <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteCategory({{ $category->id }})">
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteCategory({{ $category->id }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer; // Add this line
 use App\Models\Sale;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class SaleController extends Controller
 
     public function create()
     {
-        return view('sales.create');
+        $customers = Customer::all(); // Or any other query to get customers
+        return view('sales.create', compact('customers'));
     }
 
     public function store(Request $request)

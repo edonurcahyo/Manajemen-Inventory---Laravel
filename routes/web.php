@@ -36,6 +36,9 @@ Route::resource('sales', SaleController::class);
 
 // Reports
 Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
+Route::get('reports/purchases', [ReportController::class, 'purchases'])->name('reports.purchases');
+Route::get('reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
 
 // User Management
 Route::resource('users', UserController::class);
