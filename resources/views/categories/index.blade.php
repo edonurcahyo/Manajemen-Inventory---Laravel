@@ -26,7 +26,7 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Products Count</th>
@@ -37,12 +37,12 @@
                         <tbody>
                             @forelse($categories ?? [] as $category)
                             <tr>
-                                <td>{{ $category->id }}</td>
+                                <!-- <td>{{ $category->id }}</td> -->
                                 <td>
-                                    <strong>{{ $category->name }}</strong>
+                                    <strong>{{ $category->nama_kategori }}</strong>
                                 </td>
                                 <td>
-                                    {{ $category->description ?? '-' }}
+                                    {{ $category->deskripsi ?? '-' }}
                                 </td>
                                 <td>
                                     <span class="badge bg-info">{{ $category->products_count ?? 0 }} products</span>

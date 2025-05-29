@@ -31,7 +31,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Code</th>
+                        <!-- <th>Code</th> -->
                         <th>Name</th>
                         <th>Category</th>
                         <th>Stock</th>
@@ -43,15 +43,15 @@
                 <tbody>
                     @forelse($products ?? [] as $product)
                     <tr>
-                        <td>{{ $product->code }}</td>
-                        <td>{{ $product->name }}</td>
-                        <td>{{ $product->category->name ?? '-' }}</td>
+                        <!-- <td>{{ $product->code }}</td> -->
+                        <td>{{ $product->nama_produk }}</td>
+                        <td>{{ $product->category->nama_kategori ?? '-' }}</td>
                         <td>
-                            <span class="badge {{ $product->stock_quantity <= $product->minimum_stock ? 'bg-danger' : 'bg-success' }}">
+                            <span class="badge {{ $product->stok <= $product->minimum_stock ? 'bg-danger' : 'bg-success' }}">
                                 {{ $product->stock_quantity }}
                             </span>
                         </td>
-                        <td>Rp {{ number_format($product->selling_price, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
                         <td>
                             <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-secondary' }}">
                                 {{ $product->is_active ? 'Active' : 'Inactive' }}

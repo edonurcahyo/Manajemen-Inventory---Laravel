@@ -8,7 +8,7 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
-                <form method="POST" action="{{ route('products.store') }}">
+                <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -27,7 +27,7 @@
                                     <option value="">Select Category</option>
                                     @foreach($categories ?? [] as $category)
                                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
+                                            {{ $category->nama_kategori }}
                                         </option>
                                     @endforeach
                                 </select>

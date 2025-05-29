@@ -44,8 +44,9 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
+        // In update method:
         $request->validate([
-            'nama_kategori' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'nama_kategori' => 'required|string|max:255|unique:categories,nama_kategori,' . $category->id,
             'deskripsi' => 'nullable|string|max:1000'
         ]);
 
