@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Create New Sale</h3>
+                    <h3 class="card-title">Buat Penjualan</h3>
                     <div class="card-tools">
                         <a href="{{ route('sales.index') }}" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Back to Sales
+                            <i class="fas fa-arrow-left"></i> Kembali ke Penjualan
                         </a>
                     </div>
                 </div>
@@ -22,9 +22,9 @@
                             <!-- Customer Information -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="customer_id">Customer <span class="text-muted">(Optional)</span></label>
+                                    <label for="customer_id">Pelanggan <span class="text-muted">(Opsional)</span></label>
                                     <select class="form-control select2" id="customer_id" name="customer_id">
-                                        <option value="">Select Customer (Optional)</option>
+                                        <option value="">Pilih Pelanggan (Opsional)</option>
                                         @foreach($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->name }} - {{ $customer->phone }}</option>
                                         @endforeach
@@ -35,7 +35,7 @@
                             <!-- Sale Date -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="sale_date">Sale Date <span class="text-danger">*</span></label>
+                                    <label for="sale_date">Tanggal Penjualan <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="sale_date" name="sale_date" value="{{ date('Y-m-d') }}" required>
                                 </div>
                             </div>
@@ -45,8 +45,8 @@
                             <!-- Invoice Number -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="invoice_number">Invoice Number <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="invoice_number" name="invoice_number" value="{{ $invoiceNumber }}" readonly>
+                                    <label for="kode_penjualan">Kode Penjualan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="kode_penjualan" name="kode_penjualan" value="{{ $kode_penjualan }}" readonly>
                                 </div>
                             </div>
                             
@@ -66,24 +66,24 @@
                         <!-- Products Section -->
                         <div class="row">
                             <div class="col-12">
-                                <h5 class="mb-3">Sale Items</h5>
+                                <h5 class="mb-3">Penjualan</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="saleItemsTable">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th width="30%">Product <span class="text-danger">*</span></th>
-                                                <th width="15%">Available Stock</th>
-                                                <th width="15%">Quantity <span class="text-danger">*</span></th>
-                                                <th width="15%">Unit Price <span class="text-danger">*</span></th>
+                                                <th width="30%">Produk <span class="text-danger">*</span></th>
+                                                <th width="15%">Stok Tersedia</th>
+                                                <th width="15%">Jumlah <span class="text-danger">*</span></th>
+                                                <th width="15%">Harga Unit <span class="text-danger">*</span></th>
                                                 <th width="15%">Total</th>
-                                                <th width="10%">Action</th>
+                                                <th width="10%">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="item-row">
                                                 <td>
                                                     <select class="form-control product-select" name="items[0][product_id]" required>
-                                                        <option value="">Select Product</option>
+                                                        <option value="">Pilih Produk</option>
                                                         @foreach($products as $product)
                                                             <option value="{{ $product->id }}" data-price="{{ $product->selling_price }}" data-stock="{{ $product->stock_quantity }}">{{ $product->name }} ({{ $product->sku }})</option>
                                                         @endforeach
@@ -115,19 +115,19 @@
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="text-right"><strong>Tax (%):</strong></td>
+                                                <td colspan="4" class="text-right"><strong>Pajak (%):</strong></td>
                                                 <td>
                                                     <input type="number" class="form-control" id="tax_percentage" name="tax_percentage" min="0" max="100" step="0.01" value="0">
                                                 </td>
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="text-right"><strong>Tax Amount:</strong></td>
+                                                <td colspan="4" class="text-right"><strong>Jumlah Pajak:</strong></td>
                                                 <td><strong id="tax_amount">0.00</strong></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="text-right"><strong>Discount:</strong></td>
+                                                <td colspan="4" class="text-right"><strong>Diskon:</strong></td>
                                                 <td>
                                                     <input type="number" class="form-control" id="discount" name="discount" min="0" step="0.01" value="0">
                                                 </td>
@@ -165,10 +165,10 @@
                     
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Sale
+                            <i class="fas fa-save"></i> Buat Penjualan
                         </button>
                         <a href="{{ route('sales.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Cancel
+                            <i class="fas fa-times"></i> Batal
                         </a>
                     </div>
                 </form>

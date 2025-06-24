@@ -1,4 +1,4 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -6,8 +6,8 @@
     <form action="{{ route('users.store') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" required>
+            <label>Nama</label>
+            <input type="text" name="nama" class="form-control" required>
         </div>
         <div class="form-group">
             <label>Email</label>
@@ -27,4 +27,4 @@
         <button type="submit" class="btn btn-primary">Create User</button>
     </form>
 </div>
-@endsection
+@endsection -->

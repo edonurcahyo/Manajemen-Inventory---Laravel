@@ -16,6 +16,7 @@ class Sale extends Model
         'total_harga',
         'user_id',
     ];
+    
 
     public function customer()
     {

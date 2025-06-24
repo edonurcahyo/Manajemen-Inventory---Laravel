@@ -1,4 +1,4 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -7,8 +7,8 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+            <label>Nama</label>
+            <input type="text" name="nama" class="form-control" value="{{ $user->nama }}" required>
         </div>
         <div class="form-group">
             <label>Email</label>
@@ -28,4 +28,4 @@
         <button type="submit" class="btn btn-primary">Update User</button>
     </form>
 </div>
-@endsection
+@endsection -->

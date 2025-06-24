@@ -1,30 +1,30 @@
 @extends('layouts.app')
 
 @section('title', 'Sales - CV. Agung')
-@section('page-title', 'Sales Management')
+@section('page-title', 'Manajemen Penjualan')
 
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Sales List</h5>
+                <h5 class="mb-0">List Penjualan</h5>
                 <a href="{{ route('sales.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> New Sale
+                    <i class="fas fa-plus me-1"></i> Penjualan Baru
                 </a>
             </div>
             <div class="card-body">
                 <!-- Search and Filter -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <input type="text" class="form-control" id="searchSales" placeholder="Search sales...">
+                        <input type="text" class="form-control" id="searchSales" placeholder="Cari penjualan...">
                     </div>
                     <div class="col-md-3">
                         <select class="form-select" id="filterStatus">
-                            <option value="">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
+                            <option value="">Semua Status</option>
+                            <option value="pending">Menunggu</option>
+                            <option value="completed">Selesai</option>
+                            <option value="cancelled">Dibatalkan</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-outline-secondary" id="clearFilter">
-                            <i class="fas fa-times"></i> Clear
+                            <i class="fas fa-times"></i> Hapus
                         </button>
                     </div>
                 </div>
@@ -42,13 +42,13 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Sale ID</th>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Items</th>
-                                <th>Total Amount</th>
+                                <th>ID Penjualan</th>
+                                <th>Tanggal</th>
+                                <th>Pelanggan</th>
+                                <th>Item</th>
+                                <th>Total</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,13 +77,13 @@
                                 <td>
                                     @switch($sale->status)
                                         @case('pending')
-                                            <span class="badge bg-warning">Pending</span>
+                                            <span class="badge bg-warning">Menunggu</span>
                                             @break
                                         @case('completed')
-                                            <span class="badge bg-success">Completed</span>
+                                            <span class="badge bg-success">Selesai</span>
                                             @break
                                         @case('cancelled')
-                                            <span class="badge bg-danger">Cancelled</span>
+                                            <span class="badge bg-danger">Dibatalkan</span>
                                             @break
                                         @default
                                             <span class="badge bg-secondary">{{ ucfirst($sale->status) }}</span>
@@ -97,7 +97,7 @@
                                         <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteSale({{ $sale->id }})">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Hapus" onclick="deleteSale({{ $sale->id }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                         @if($sale->status === 'pending')
@@ -113,9 +113,9 @@
                                 <td colspan="7" class="text-center py-4">
                                     <div class="text-muted">
                                         <i class="fas fa-shopping-cart fa-3x mb-3"></i>
-                                        <p>No sales found</p>
+                                        <p>Tidak ada penjualan</p>
                                         <a href="{{ route('sales.create') }}" class="btn btn-primary">
-                                            <i class="fas fa-plus me-1"></i> Create First Sale
+                                            <i class="fas fa-plus me-1"></i> Buat Penjualan Pertama
                                         </a>
                                     </div>
                                 </td>
@@ -141,18 +141,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this sale? This action cannot be undone.
+                Apakah Anda yakin ingin menghapus penjualan ini? Tindakan ini tidak dapat dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <form id="deleteForm" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
                 </form>
             </div>
         </div>
@@ -170,7 +170,7 @@ function deleteSale(saleId) {
 }
 
 function completeSale(saleId) {
-    if (confirm('Mark this sale as completed?')) {
+    if (confirm('Tandai penjualan ini sebagai selesai?')) {
         // Create a form to submit the status update
         const form = document.createElement('form');
         form.method = 'POST';

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Products - CV. Agung')
-@section('page-title', 'Product Management')
+@section('page-title', 'Manajemen Produk')
 
 @section('page-actions')
 <a href="{{ route('products.create') }}" class="btn btn-primary">
-    <i class="fas fa-plus me-1"></i> Add Product
+    <i class="fas fa-plus me-1"></i> Tambah Produk Baru
 </a>
 @endsection
 
@@ -14,11 +14,11 @@
     <div class="card-header">
         <div class="row align-items-center">
             <div class="col">
-                <h5 class="card-title mb-0">Products List</h5>
+                <h5 class="card-title mb-0">Daftar Produk</h5>
             </div>
             <div class="col-auto">
                 <form method="GET" class="d-flex">
-                    <input type="text" name="search" class="form-control me-2" placeholder="Search products..." value="{{ request('search') }}">
+                    <input type="text" name="search" class="form-control me-2" placeholder="Cari produk..." value="{{ request('search') }}">
                     <button type="submit" class="btn btn-outline-secondary">
                         <i class="fas fa-search"></i>
                     </button>
@@ -32,12 +32,12 @@
                 <thead>
                     <tr>
                         <!-- <th>Code</th> -->
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Stock</th>
-                        <th>Price</th>
+                        <th>Nama</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,7 +54,7 @@
                         <td>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
                         <td>
                             <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                {{ $product->is_active ? 'Active' : 'Inactive' }}
+                                {{ $product->is_active ? 'Aktif' : 'Tidak Aktif' }}
                             </span>
                         </td>
                         <td>
@@ -68,7 +68,7 @@
                                 <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin?')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -77,7 +77,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center">No products found</td>
+                        <td colspan="7" class="text-center">Tidak ada produk ditemukan</td>
                     </tr>
                     @endforelse
                 </tbody>

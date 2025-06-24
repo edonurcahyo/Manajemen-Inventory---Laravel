@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Purchases - CV. Agung')
-@section('page-title', 'Purchase Management')
+@section('page-title', 'Manajemen Pembelian')
 
 @section('content')
 <div class="row mb-3">
@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-6 text-end">
         <a href="{{ route('purchases.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i> New Purchase
+            <i class="fas fa-plus me-1"></i> Buat Pembelian Baru
         </a>
     </div>
 </div>
@@ -26,9 +26,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <label for="supplierFilter" class="form-label">Filter by Supplier</label>
+                        <label for="supplierFilter" class="form-label">Filter by Pemasok</label>
                         <select class="form-select" id="supplierFilter">
-                            <option value="">All Suppliers</option>
+                            <option value="">Semua Pemasok</option>
                             @foreach($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                             @endforeach
@@ -37,18 +37,18 @@
                     <div class="col-md-3">
                         <label for="statusFilter" class="form-label">Filter by Status</label>
                         <select class="form-select" id="statusFilter">
-                            <option value="">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
+                            <option value="">Semua Status</option>
+                            <option value="pending">Menunggu</option>
+                            <option value="completed">Selesai</option>
+                            <option value="cancelled">Dibatalkan</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="dateFrom" class="form-label">Date From</label>
+                        <label for="dateFrom" class="form-label">Tanggal Dari</label>
                         <input type="date" class="form-control" id="dateFrom">
                     </div>
                     <div class="col-md-3">
-                        <label for="dateTo" class="form-label">Date To</label>
+                        <label for="dateTo" class="form-label">Tanggal Sampai</label>
                         <input type="date" class="form-control" id="dateTo">
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <i class="fas fa-undo me-1"></i> Reset
                         </button>
                         <button type="button" class="btn btn-primary" id="applyFilter">
-                            <i class="fas fa-filter me-1"></i> Apply Filter
+                            <i class="fas fa-filter me-1"></i> Terapkan Filter
                         </button>
                     </div>
                 </div>
@@ -68,19 +68,19 @@
 </div>
 
 <div class="card">
-    <div class="card-body">
+    <div class.card-body>
         @if($purchases->count() > 0)
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>Purchase #</th>
-                            <th>Date</th>
-                            <th>Supplier</th>
-                            <th>Items</th>
-                            <th>Total Amount</th>
+                            <th>Pembelian #</th>
+                            <th>Tanggal</th>
+                            <th>Pemasok</th>
+                            <th>Item</th>
+                            <th>Total</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="purchaseTableBody">
@@ -97,18 +97,18 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-info">{{ $purchase->purchaseDetails->count() }} items</span>
+                                <span class="badge bg-info">{{ $purchase->purchaseDetails->count() }} item</span>
                             </td>
                             <td>
                                 <strong>Rp {{ number_format($purchase->total_amount, 0, ',', '.') }}</strong>
                             </td>
                             <td>
                                 @if($purchase->status == 'pending')
-                                    <span class="badge bg-warning">Pending</span>
+                                    <span class="badge bg-warning">Menunggu</span>
                                 @elseif($purchase->status == 'completed')
-                                    <span class="badge bg-success">Completed</span>
+                                    <span class="badge bg-success">Selesai</span>
                                 @else
-                                    <span class="badge bg-danger">Cancelled</span>
+                                    <span class="badge bg-danger">Dibatalkan</span>
                                 @endif
                             </td>
                             <td>
@@ -121,7 +121,7 @@
                                        class="btn btn-sm btn-outline-primary" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    @if($purchase->status == 'pending')
+                                    @if($purchase->status == 'menunggu')
                                     <button type="button" class="btn btn-sm btn-outline-success" 
                                             onclick="updateStatus({{ $purchase->id }}, 'completed')" title="Mark as Completed">
                                         <i class="fas fa-check"></i>
@@ -153,10 +153,10 @@
         @else
             <div class="text-center py-5">
                 <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">No purchases found</h5>
-                <p class="text-muted">Start by creating your first purchase transaction.</p>
+                <h5 class="text-muted">Tidak ada pembelian ditemukan</h5>
+                <p class="text-muted">Mulai dengan membuat transaksi pembelian pertama Anda.</p>
                 <a href="{{ route('purchases.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> Create First Purchase
+                    <i class="fas fa-plus me-1"></i> Buat Pembelian Pertama
                 </a>
             </div>
         @endif
@@ -168,15 +168,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this purchase? This action cannot be undone.</p>
+                <p>Apakah Anda yakin ingin menghapus pembelian ini? Tindakan ini tidak dapat dibatalkan.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
             </div>
         </div>
     </div>

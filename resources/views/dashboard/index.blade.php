@@ -11,7 +11,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Total Products</div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Total Produk</div>
                         <div class="h5 mb-0 font-weight-bold text-primary">{{ $totalProducts ?? 0 }}</div>
                     </div>
                     <div class="col-auto">
@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Low Stock Items</div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Stok Rendah</div>
                         <div class="h5 mb-0 font-weight-bold text-warning">{{ $lowStockItems ?? 0 }}</div>
                     </div>
                     <div class="col-auto">
@@ -41,7 +41,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Today's Sales</div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Penjualan Hari Ini</div>
                         <div class="h5 mb-0 font-weight-bold text-success">Rp {{ number_format($todaySales ?? 0, 0, ',', '.') }}</div>
                     </div>
                     <div class="col-auto">
@@ -56,7 +56,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-uppercase mb-1">Monthly Revenue</div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">Pendapatan Bulanan</div>
                         <div class="h5 mb-0 font-weight-bold text-info">Rp {{ number_format($monthlyRevenue ?? 0, 0, ',', '.') }}</div>
                     </div>
                     <div class="col-auto">
@@ -73,16 +73,16 @@
     <div class="col-lg-8 mb-4">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Sales</h5>
-                <a href="{{ route('sales.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                <h5 class="card-title mb-0">Penjualan Terbaru</h5>
+                <a href="{{ route('sales.index') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Customer</th>
+                                <th>Tanggal</th>
+                                <th>Pelanggan</th>
                                 <th>Total</th>
                                 <th>Status</th>
                             </tr>
@@ -101,7 +101,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center">No recent sales</td>
+                                <td colspan="4" class="text-center">Tidak ada penjualan terbaru</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -114,8 +114,8 @@
     <div class="col-lg-4 mb-4">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Low Stock Alert</h5>
-                <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">View Categories</a>
+                <h5 class="card-title mb-0">Peringatan Stok Rendah</h5>
+                <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">Lihat Kategori</a>
             </div>
             <div class="card-body">
                 @forelse($lowStockProducts ?? [] as $product)
@@ -127,7 +127,7 @@
                     <span class="badge bg-warning">Low</span>
                 </div>
                 @empty
-                <p class="text-muted">All products have sufficient stock</p>
+                <p class="text-muted">Tidak ada produk dengan stok rendah</p>
                 @endforelse
             </div>
         </div>
@@ -139,8 +139,8 @@
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Sales Trend (Last 7 Days)</h5>
-                <a href="{{ route('reports.index') }}" class="btn btn-sm btn-outline-info">View Reports</a>
+                <h5 class="card-title mb-0">Tren Penjualan (7 Hari Terakhir)</h5>
+                <a href="{{ route('reports.index') }}" class="btn btn-sm btn-outline-info">Lihat Laporan</a>
             </div>
             <div class="card-body">
                 <canvas id="salesChart" height="100"></canvas>
@@ -152,36 +152,83 @@
 
 @section('scripts')
 <script>
-// Sales Chart
-const ctx = document.getElementById('salesChart').getContext('2d');
-const salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: {!! json_encode($chartLabels ?? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']) !!},
-        datasets: [{
-            label: 'Sales (Rp)',
-            data: {!! json_encode($chartData ?? [0, 0, 0, 0, 0, 0, 0]) !!},
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            tension: 0.1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false }
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(33, 150, 243, 0.4)');
+    gradient.addColorStop(1, 'rgba(33, 150, 243, 0.05)');
+
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartLabels ?? ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']) !!},
+            datasets: [{
+                label: 'Penjualan (Rp)',
+                data: {!! json_encode($chartData ?? [0, 0, 0, 0, 0, 0, 0]) !!},
+                fill: true,
+                backgroundColor: gradient,
+                borderColor: '#2196f3',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#2196f3'
+            }]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    callback: function(value) {
-                        return 'Rp ' + value.toLocaleString();
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                        }
+                    },
+                    backgroundColor: '#fff',
+                    titleColor: '#333',
+                    bodyColor: '#333',
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    padding: 10
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 12
+                        },
+                        callback: function(value) {
+                            return 'Rp ' + value.toLocaleString('id-ID');
+                        }
                     }
                 }
             }
         }
-    }
+    });
 });
 </script>
 @endsection

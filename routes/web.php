@@ -42,3 +42,4 @@ Route::get('reports/inventory', [ReportController::class, 'inventory'])->name('r
 
 // User Management
 Route::resource('users', UserController::class);
+Route::resource('users', UserController::class)->except(['show']);
