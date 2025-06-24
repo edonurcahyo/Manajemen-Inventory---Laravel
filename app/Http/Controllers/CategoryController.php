@@ -39,7 +39,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        $categories = Category::all();
+        return view('categories.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, Category $category)

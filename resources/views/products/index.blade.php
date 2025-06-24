@@ -36,7 +36,7 @@
                         <th>Kategori</th>
                         <th>Stok</th>
                         <th>Harga</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -52,11 +52,11 @@
                             </span>
                         </td>
                         <td>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>
-                        <td>
+                        <!-- <td>
                             <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-secondary' }}">
                                 {{ $product->is_active ? 'Aktif' : 'Tidak Aktif' }}
                             </span>
-                        </td>
+                        </td> -->
                         <td>
                             <div class="btn-group" role="group">
                                 <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-info">

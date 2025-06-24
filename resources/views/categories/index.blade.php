@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
 @section('title', 'Categories - CV. Agung')
-@section('page-title', 'Category Management')
+@section('page-title', 'Manajemen Kategori')
 
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Categories List</h5>
+                <h5 class="mb-0">Daftar Kategori</h5>
                 <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> New Category
+                    <i class="fas fa-plus me-1"></i> Kategori Baru
                 </a>
             </div>
             <div class="card-body">
                 <!-- Search -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" id="searchCategories" placeholder="Search categories...">
+                        <input type="text" class="form-control" id="searchCategories" placeholder="Cari kategori...">
                     </div>
                 </div>
 
@@ -27,11 +27,11 @@
                         <thead>
                             <tr>
                                 <!-- <th>ID</th> -->
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Products Count</th>
-                                <th>Created</th>
-                                <th>Actions</th>
+                                <th>Nama</th>
+                                <th>Deskripsi</th>
+                                <th>Jumlah Produk</th>
+                                <th>Dibuat</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,18 +45,18 @@
                                     {{ $category->deskripsi ?? '-' }}
                                 </td>
                                 <td>
-                                    <span class="badge bg-info">{{ $category->products_count ?? 0 }} products</span>
+                                    <span class="badge bg-info">{{ $category->products_count ?? 0 }} produk</span>
                                 </td>
                                 <td>{{ $category->created_at ? $category->created_at->format('d M Y') : '-' }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('categories.show', $category->id) }}" class="btn btn-sm btn-outline-info" title="View">
+                                        <a href="{{ route('categories.show', $category->id) }}" class="btn btn-sm btn-outline-info" title="Lihat">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteCategory({{ $category->id }})">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" title="Hapus" onclick="deleteCategory({{ $category->id }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -67,9 +67,9 @@
                                 <td colspan="6" class="text-center py-4">
                                     <div class="text-muted">
                                         <i class="fas fa-tags fa-3x mb-3"></i>
-                                        <p>No categories found</p>
+                                        <p>Tidak ada kategori ditemukan</p>
                                         <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                                            <i class="fas fa-plus me-1"></i> Create First Category
+                                            <i class="fas fa-plus me-1"></i> Buat Kategori
                                         </a>
                                     </div>
                                 </td>
@@ -95,18 +95,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this category? This action cannot be undone.
+                Apakah Anda yakin ingin menghapus kategori ini? Tindakan ini tidak dapat dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <form id="deleteForm" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
                 </form>
             </div>
         </div>
