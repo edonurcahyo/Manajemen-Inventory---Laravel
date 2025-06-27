@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'New Purchase - CV. Agung')
-@section('page-title', 'Create Purchase Order')
+@section('title', 'Buat Pembelian Baru')
+@section('page-title', 'Buat Pembelian Baru')
 
 @section('content')
 <div class="row">
@@ -13,9 +13,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="supplier_id" class="form-label">Supplier *</label>
+                                <label for="supplier_id" class="form-label">Pemasok *</label>
                                 <select class="form-select @error('supplier_id') is-invalid @enderror" id="supplier_id" name="supplier_id" required>
-                                    <option value="">Select Supplier</option>
+                                    <option value="">Pilih Pemasok</option>
                                     @foreach($suppliers ?? [] as $supplier)
                                         <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
                                             {{ $supplier->name }}
@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="purchase_date" class="form-label">Purchase Date *</label>
+                                <label for="purchase_date" class="form-label">Tanggal Pembelian *</label>
                                 <input type="date" class="form-control @error('purchase_date') is-invalid @enderror" id="purchase_date" name="purchase_date" value="{{ old('purchase_date', date('Y-m-d')) }}" required>
                                 @error('purchase_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -39,16 +39,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="notes" class="form-label">Notes</label>
+                        <label for="notes" class="form-label">Catatan</label>
                         <textarea class="form-control" id="notes" name="notes" rows="2">{{ old('notes') }}</textarea>
                     </div>
 
                     <hr>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5>Purchase Items</h5>
+                        <h5>Item Pembelian</h5>
                         <button type="button" class="btn btn-success" id="addItem">
-                            <i class="fas fa-plus"></i> Add Item
+                            <i class="fas fa-plus"></i> Tambah Item
                         </button>
                     </div>
 
@@ -56,11 +56,11 @@
                         <table class="table table-bordered" id="itemsTable">
                             <thead>
                                 <tr>
-                                    <th width="30%">Product</th>
-                                    <th width="15%">Quantity</th>
-                                    <th width="20%">Unit Price</th>
+                                    <th width="30%">Produk</th>
+                                    <th width="15%">Kuantitas</th>
+                                    <th width="20%">Harga Satuan</th>
                                     <th width="20%">Subtotal</th>
-                                    <th width="10%">Action</th>
+                                    <th width="10%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="itemsBody">
@@ -68,7 +68,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3" class="text-end">Total Amount:</th>
+                                    <th colspan="3" class="text-end">Total:</th>
                                     <th>
                                         <span id="totalAmount">Rp 0</span>
                                         <input type="hidden" name="total_amount" id="totalAmountInput" value="0">
@@ -81,10 +81,10 @@
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{{ route('purchases.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Back
+                            <i class="fas fa-arrow-left me-1"></i> Kembali
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Save Purchase
+                            <i class="fas fa-save me-1"></i> Simpan Pembelian
                         </button>
                     </div>
                 </form>
@@ -97,7 +97,7 @@
 @section('scripts')
 <script>
 let itemIndex = 0;
-const products = @json($products ?? []);
+const products = @json($products);
 
 function addItem() {
     const tbody = document.getElementById('itemsBody');
@@ -105,8 +105,10 @@ function addItem() {
     row.innerHTML = `
         <td>
             <select class="form-select product-select" name="items[${itemIndex}][product_id]" required>
-                <option value="">Select Product</option>
-                ${products.map(product => `<option value="${product.id}" data-price="${product.purchase_price}">${product.name}</option>`).join('')}
+                <option value="">Pilih Produk</option>
+                ${products.map(product => `
+                    <option value="${product.id}" data-price="${product.harga_beli}">${product.nama_produk}</option>
+                `).join('')}
             </select>
         </td>
         <td>

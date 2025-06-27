@@ -12,15 +12,23 @@ class SaleController extends Controller
 {
     public function index()
     {
-        $sales = Sale::paginate(10); // or any number per page
+        $sales = Sale::paginate(10); 
         return view('sales.index', compact('sales'));
     }
     
     public function create()
     {
         $customers = Customer::all();
-        $products = Product::all();
-
+        $products = Product::all()->map(function($product) {
+            return (object) [
+                'id' => $product->id,
+                'kode_produk' => $product->kode_produk,
+                'nama_produk' => $product->nama_produk,
+                'harga_jual' => $product->harga_jual,
+                'stok' => $product->stok
+            ];
+        });
+        
         // Generate kode penjualan unik
         $lastSale = Sale::latest()->first();
         $nextId = $lastSale ? $lastSale->id + 1 : 1;

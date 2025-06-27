@@ -22,6 +22,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     public function purchases()
     {
         return $this->hasMany(Purchase::class);

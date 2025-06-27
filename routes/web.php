@@ -1,45 +1,71 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    AuthController,
+    DashboardController,
+    CategoryController,
+    ProductController,
+    PurchaseController,
+    SaleController,
+    ReportController,
+    UserController
+};
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
+| Ini adalah file route utama untuk aplikasi web Anda.
+| Semua route yang memerlukan autentikasi dikelompokkan dengan middleware 'auth'.
+|--------------------------------------------------------------------------
 */
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+// ============================
+// Route Auth (Guest Access)
+// ============================
 
-// Category Management
-Route::resource('categories', CategoryController::class);
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
-// Product Management
-Route::resource('products', ProductController::class);
+// Redirect root ke login (jika belum login)
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
-// Purchase Transactions
-Route::resource('purchases', PurchaseController::class);
+// ============================
+// Protected Routes (Require Auth)
+// ============================
+Route::middleware('auth')->group(function () {
 
-// Sales Transactions
-Route::resource('sales', SaleController::class);
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Reports
-Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-Route::get('reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
-Route::get('reports/purchases', [ReportController::class, 'purchases'])->name('reports.purchases');
-Route::get('reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
+    // Category Management
+    Route::resource('categories', CategoryController::class);
 
-// User Management
-Route::resource('users', UserController::class);
-Route::resource('users', UserController::class)->except(['show']);
+    // Product Management
+    Route::resource('products', ProductController::class);
+
+    // Purchase Transactions
+    Route::resource('purchases', PurchaseController::class);
+
+    // Sales Transactions
+    Route::resource('sales', SaleController::class);
+
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
+        Route::get('/purchases', [ReportController::class, 'purchases'])->name('purchases');
+        Route::get('/inventory', [ReportController::class, 'inventory'])->name('inventory');
+    });
+
+    // User Management (tanpa show)
+    Route::resource('users', UserController::class)->except(['show']);
+
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});

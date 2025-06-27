@@ -55,9 +55,9 @@
                                 <div class="form-group">
                                     <label for="status">Status <span class="text-danger">*</span></label>
                                     <select class="form-control" id="status" name="status" required>
-                                        <option value="pending">Pending</option>
-                                        <option value="completed" selected>Completed</option>
-                                        <option value="cancelled">Cancelled</option>
+                                        <option value="pending">Menunggu</option>
+                                        <option value="completed" selected>Lengkap</option>
+                                        <option value="cancelled">Dibatalkan</option>
                                     </select>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                                                     <select class="form-control product-select" name="items[0][product_id]" required>
                                                         <option value="">Pilih Produk</option>
                                                         @foreach($products as $product)
-                                                            <option value="{{ $product->id }}" data-price="{{ $product->selling_price }}" data-stock="{{ $product->stock_quantity }}">{{ $product->name }} ({{ $product->sku }})</option>
+                                                        <option value="{{ $product->id }}" data-price="{{ $product->harga_jual }}" data-stock="{{ $product->stok }}">{{ $product->nama_produk }}</option>
                                                         @endforeach
                                                     </select>
                                                 </td>
@@ -142,7 +142,7 @@
                                     </table>
                                 </div>
                                 <button type="button" class="btn btn-success btn-sm" id="addItem">
-                                    <i class="fas fa-plus"></i> Add Item
+                                    <i class="fas fa-plus"></i> Tambah Item
                                 </button>
                             </div>
                         </div>
@@ -151,8 +151,8 @@
                         <div class="row mt-3">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="notes">Notes</label>
-                                    <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Additional notes for this sale..."></textarea>
+                                    <label for="notes">Catatan</label>
+                                    <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Catatan tambahan untuk penjualan ini..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ $(document).ready(function() {
                     <select class="form-control product-select" name="items[${itemIndex}][product_id]" required>
                         <option value="">Select Product</option>
                         @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->selling_price }}" data-stock="{{ $product->stock_quantity }}">{{ $product->name }} ({{ $product->sku }})</option>
+                            <option value="{{ $product->id }}" data-price="{{ $product->harga_jual }}" data-stock="{{ $product->stok }}">{{ $product->nama_produk }} ({{ $product->kode_produk }})</option>
                         @endforeach
                     </select>
                 </td>

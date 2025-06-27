@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Purchases - CV. Agung')
+@section('title', 'Pembelian - CV. Agung')
 @section('page-title', 'Manajemen Pembelian')
 
 @section('content')
 <div class="row mb-3">
     <div class="col-md-6">
         <div class="input-group">
-            <input type="text" class="form-control" id="searchInput" placeholder="Search purchases...">
+            <input type="text" class="form-control" id="searchInput" placeholder="Cari Pembelian..." aria-label="Search Purchases">
             <button class="btn btn-outline-secondary" type="button" id="searchBtn">
                 <i class="fas fa-search"></i>
             </button>

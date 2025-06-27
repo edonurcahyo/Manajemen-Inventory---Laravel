@@ -3,14 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 use App\Models\Category;
+use App\Models\Sale;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $totalProduk = Product::count(); 
         $totalCategories = Category::count();
-        // Logic for stock overview and alerts
-        return view('dashboard.index', compact('totalCategories'));
+
+        // Produk dengan stok di bawah ambang batas, misalnya < 5
+        $lowStockItems = Product::where('stok', '<', 5)->count();
+        $lowStockProducts = Product::where('stok', '<', 5)->get();
+
+        // Total penjualan hari ini
+        $todaySales = Sale::whereDate('created_at', now())->sum('total_harga');
+        $totalPenjualanHariIni = Sale::whereDate('created_at', now())->sum('total_harga');
+
+        // Total pendapatan bulan ini
+        $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
+                              ->whereYear('created_at', now()->year)
+                              ->sum('total_harga');
+
+        // Penjualan terbaru
+        $recentSales = Sale::with('customer')->latest()->take(5)->get();
+
+        // Data dummy tren penjualan 7 hari terakhir (harusnya pakai grup by tanggal penjualan)
+        $chartLabels = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        $chartData = [12000, 8000, 15000, 7000, 9000, 11000, 13000];
+
+        return view('dashboard.index', compact(
+            'totalProduk',
+            'totalCategories',
+            'lowStockItems',
+            'lowStockProducts',
+            'todaySales',
+            'monthlyRevenue',
+            'recentSales',
+            'chartLabels',
+            'chartData'
+        ));
     }
 }

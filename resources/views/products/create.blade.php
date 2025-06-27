@@ -22,9 +22,9 @@
                         </div> -->
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="category_id" class="form-label">Kategori *</label>
-                                <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
-                                    <option value="">Select Category</option>
+                                <label for="categories_id" class="form-label">Kategori *</label>
+                                <select class="form-select @error('categories_id') is-invalid @enderror" id="categories_id" name="categories_id" required>
+                                    <option value="">Pilih Kategori</option>
                                     @foreach($categories ?? [] as $category)
                                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                             {{ $category->nama_kategori }}

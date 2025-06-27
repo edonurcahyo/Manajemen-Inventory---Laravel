@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchase;
+use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -12,12 +13,22 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::all();
         $suppliers = Supplier::all();
-        return view('purchases.index', compact('purchases', 'suppliers'));
+        $products = Product::all();
+        return view('purchases.index', compact('purchases', 'suppliers', 'products'));
     }
 
     public function create()
     {
-        return view('purchases.create');
+        $products = Product::all()->map(function($product) {
+            return (object) [
+                'id' => $product->id,
+                'nama_produk' => $product->nama_produk,
+                'harga_beli' => $product->harga_beli
+            ];
+        });
+        
+        $suppliers = Supplier::all();
+        return view('purchases.create', compact('products', 'suppliers'));
     }
 
     public function store(Request $request)

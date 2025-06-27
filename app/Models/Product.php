@@ -12,16 +12,14 @@ class Product extends Model
     protected $fillable = [
         'kode_produk',
         'nama_produk',
-        'categories_id',
-        'satuan',
-        'harga_beli',
         'harga_jual',
         'stok',
+        'deskripsi',       // opsional, jika kamu ingin menambahkan deskripsi produk
     ];
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'categories_id');
+        return $this->belongsTo(Category::class, 'category_id'); // ✅ fix foreign key
     }
 
     public function purchaseDetails()

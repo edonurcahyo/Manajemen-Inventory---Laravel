@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-    {{-- Flash Message --}}
+    <!-- {{-- Flash Message --}}
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -15,7 +15,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif -->
 
     <div class="row">
         <div class="col-12">
@@ -48,7 +48,7 @@
                                 <td>{{ $user->nama }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>
-                                    <span class="badge badge-{{ $user->role == 'admin' ? 'primary' : 'secondary' }}">
+                                    <span class="text-black badge badge-{{ $user->role == 'admin' ? 'primary' : 'secondary' }}">
                                         {{ ucfirst($user->role) }}
                                     </span>
                                 </td>

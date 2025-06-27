@@ -12,7 +12,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-uppercase mb-1">Total Produk</div>
-                        <div class="h5 mb-0 font-weight-bold text-primary">{{ $totalProducts ?? 0 }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-primary">{{ $totalProduk ?? 0 }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-box fa-2x text-primary"></i>
@@ -110,18 +110,19 @@
             </div>
         </div>
     </div>
+
     <!-- Low Stock Alert -->
     <div class="col-lg-4 mb-4">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Peringatan Stok Rendah</h5>
-                <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">Lihat Kategori</a>
+                <a href="{{ route('products.index') }}" class="btn btn-sm btn-outline-secondary">Lihat Produk</a>
             </div>
             <div class="card-body">
                 @forelse($lowStockProducts ?? [] as $product)
                 <div class="d-flex align-items-center mb-3">
                     <div class="flex-grow-1">
-                        <h6 class="mb-1">{{ $product->name }}</h6>
+                        <h6 class="mb-1">{{ $product->nama_produk }}</h6>
                         <small class="text-muted">Stock: {{ $product->stock_quantity }}</small>
                     </div>
                     <span class="badge bg-warning">Low</span>
