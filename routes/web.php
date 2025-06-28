@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     PurchaseController,
     SaleController,
     ReportController,
-    UserController
+    UserController,
+    SupplierController
 };
 
 /*
@@ -21,41 +22,40 @@ use App\Http\Controllers\{
 |--------------------------------------------------------------------------
 */
 
-// ============================
-// Route Auth (Guest Access)
-// ============================
-
+/*
+|--------------------------------------------------------------------------
+| Auth Routes (Guest Access)
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-// Redirect root ke login (jika belum login)
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Redirect root ke login
+Route::get('/', fn () => redirect()->route('login'));
 
-// ============================
-// Protected Routes (Require Auth)
-// ============================
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (Requires Authentication)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Category Management
+    // Master Data
     Route::resource('categories', CategoryController::class);
-
-    // Product Management
     Route::resource('products', ProductController::class);
+    Route::resource('suppliers', SupplierController::class);
 
-    // Purchase Transactions
+    // Transaksi
     Route::resource('purchases', PurchaseController::class);
-
-    // Sales Transactions
     Route::resource('sales', SaleController::class);
 
-    // Reports
+    // Laporan
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/inventory', [ReportController::class, 'inventory'])->name('inventory');
     });
 
-    // User Management (tanpa show)
+    // Manajemen Pengguna
     Route::resource('users', UserController::class)->except(['show']);
 
     // Logout

@@ -82,9 +82,11 @@
                         ['route' => 'purchases.index', 'icon' => 'fa-shopping-cart', 'label' => 'Pembelian'],
                         ['route' => 'sales.index', 'icon' => 'fa-cash-register', 'label' => 'Penjualan'],
                         ['route' => 'reports.index', 'icon' => 'fa-chart-bar', 'label' => 'Laporan'],
+                        ['route' => 'suppliers.index', 'icon' => 'fa-truck', 'label' => 'Pemasok'], 
                         ['route' => 'users.index', 'icon' => 'fa-users', 'label' => 'Pengguna'],
                     ];
                 @endphp
+
                 @foreach($routes as $item)
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}"

@@ -10,11 +10,12 @@ class Purchase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode_pembelian',
-        'supplier_id',
-        'tanggal',
-        'total_harga',
-        'user_id',
+    'supplier_id',
+    'purchase_date',
+    'purchase_number',
+    'total_amount',
+    'status',
+    'notes',
     ];
 
     public function supplier()

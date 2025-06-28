@@ -9,6 +9,8 @@ class PurchaseDetail extends Model
 {
     use HasFactory;
 
+    protected $table = 'purchase_details'; // <== Tambahkan ini
+
     protected $fillable = [
         'purchase_id',
         'product_id',
