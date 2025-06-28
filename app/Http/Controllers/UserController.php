@@ -63,4 +63,37 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully');
     }
+
+    public function profile()
+    {
+        $user = auth()->user(); // mengambil data user yang sedang login
+        return view('users.profile', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user(); // atau User::find(auth()->id());
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'no_telepon' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $user->nama = $request->nama;
+        $user->email = $request->email;
+        $user->no_telepon = $request->no_telepon;
+        $user->alamat = $request->alamat;
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save(); // ✅
+
+        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui');
+    }
+
 }

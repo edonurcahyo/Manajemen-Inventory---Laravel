@@ -73,7 +73,7 @@
                 <h4 class="fw-bold">CV. Agung</h4>
                 <small class="text-white-50">Inventory System</small>
             </div>
-            <!-- ... sebelumnya tetap -->
+
             <ul class="nav flex-column px-2">
                 @php
                     $routes = [
@@ -82,7 +82,7 @@
                         ['route' => 'purchases.index', 'icon' => 'fa-shopping-cart', 'label' => 'Pembelian'],
                         ['route' => 'sales.index', 'icon' => 'fa-cash-register', 'label' => 'Penjualan'],
                         ['route' => 'reports.index', 'icon' => 'fa-chart-bar', 'label' => 'Laporan'],
-                        ['route' => 'suppliers.index', 'icon' => 'fa-truck', 'label' => 'Pemasok'], 
+                        ['route' => 'suppliers.index', 'icon' => 'fa-truck', 'label' => 'Pemasok'],
                         ['route' => 'users.index', 'icon' => 'fa-users', 'label' => 'Pengguna'],
                     ];
                 @endphp
@@ -90,25 +90,17 @@
                 @foreach($routes as $item)
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}"
-                        href="{{ route($item['route']) }}">
+                           href="{{ route($item['route']) }}">
                             <i class="fas {{ $item['icon'] }} me-2"></i> {{ $item['label'] }}
                         </a>
                     </li>
                 @endforeach
-
-                {{-- Tombol Logout --}}
-                <li class="nav-item mt-4">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="nav-link btn btn-link text-start text-white w-100">
-                            <i class="fas fa-sign-out-alt me-2"></i> Logout
-                        </button>
-                    </form>
-                </li>
             </ul>
         </nav>
+
         <!-- Main Content -->
-        <div class="main-content">
+        <div class="main-content flex-grow-1">
+            <!-- Topbar -->
             <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
                 <div class="d-flex align-items-center">
                     <button class="burger-btn d-md-none me-3" id="toggleSidebar">
@@ -116,8 +108,29 @@
                     </button>
                     <h1 class="h2 mb-0">@yield('page-title', 'Dashboard')</h1>
                 </div>
-                <div class="btn-toolbar">
-                    @yield('page-actions')
+
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-2 fs-5"></i>
+                        <span>{{ Auth::user()->nama ?? 'User' }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('profile') }}">
+                                <i class="fas fa-user me-2"></i> Profil Saya
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button class="dropdown-item text-danger" type="submit">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
