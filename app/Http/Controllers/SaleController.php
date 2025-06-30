@@ -45,13 +45,13 @@ class SaleController extends Controller
             'status' => 'required|string',
             'items' => 'required|array',
             'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|numeric|min:1',
-            'items.*.unit_price' => 'required|numeric|min:0',
+            'items.*.jumlah' => 'required|numeric|min:1',
+            'items.*.harga_jual' => 'required|numeric|min:0',
         ]);
 
         $subtotal = 0;
         foreach ($request->items as $item) {
-            $subtotal += $item['quantity'] * $item['unit_price'];
+            $subtotal += $item['jumlah'] * $item['harga_jual'];
         }
 
         $tax = ($request->tax_percentage ?? 0) * $subtotal / 100;
@@ -71,13 +71,13 @@ class SaleController extends Controller
             SaleDetail::create([
                 'sale_id' => $sale->id,
                 'product_id' => $item['product_id'],
-                'jumlah' => $item['quantity'],
-                'harga_jual' => $item['unit_price'],
-                'subtotal' => $item['quantity'] * $item['unit_price'],
+                'jumlah' => $item['jumlah'],
+                'harga_jual' => $item['harga_jual'],
+                'subtotal' => $item['jumlah'] * $item['harga_jual'],
             ]);
 
             $product = Product::find($item['product_id']);
-            $product->stok -= $item['quantity'];
+            $product->stok -= $item['jumlah'];
             $product->save();
         }
 

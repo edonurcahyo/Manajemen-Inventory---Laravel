@@ -15,6 +15,7 @@ class Sale extends Model
         'tanggal',
         'total_harga',
         'user_id',
+        'status',
     ];
     
 

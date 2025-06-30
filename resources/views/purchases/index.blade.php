@@ -190,22 +190,40 @@
         window.location.href = '{{ route("purchases.index") }}';
     });
 
-    // Delete
+    // Delete (fix modal for Bootstrap 5)
     function deletePurchase(id) {
         const url = '{{ route("purchases.destroy", ":id") }}'.replace(':id', id);
         $('#deleteForm').attr('action', url);
-        $('#deleteModal').modal('show');
+
+        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        modal.show();
     }
 
-    // Status
+    // Update Status (fix CSRF and method injection)
     function updateStatus(id, status) {
         const form = $('<form>', {
             method: 'POST',
             action: '{{ route("purchases.update", ":id") }}'.replace(':id', id)
         });
-        form.append('@csrf');
-        form.append('@method("PUT")');
-        form.append($('<input>', { type: 'hidden', name: 'status', value: status }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: '_token',
+            value: '{{ csrf_token() }}'
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: '_method',
+            value: 'PUT'
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'status',
+            value: status
+        }));
+
         $('body').append(form);
         form.submit();
     }
