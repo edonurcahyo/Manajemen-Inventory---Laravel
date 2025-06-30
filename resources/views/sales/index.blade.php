@@ -57,7 +57,7 @@
                                 <td>
                                     <strong>#{{ str_pad($sale->id, 6, '0', STR_PAD_LEFT) }}</strong>
                                 </td>
-                                <td>{{ $sale->sale_date ? $sale->sale_date->format('d M Y') : '-' }}</td>
+                                <td>{{ $sale->tanggal ? \Carbon\Carbon::parse($sale->tanggal)->format('d M Y') : '-' }}</td>
                                 <td>
                                     @if($sale->customer)
                                         <div>
@@ -65,14 +65,14 @@
                                             <small class="text-muted">{{ $sale->customer->phone }}</small>
                                         </div>
                                     @else
-                                        <span class="text-muted">Walk-in Customer</span>
+                                        <span class="text-muted">Pelanggan Langsung</span>
                                     @endif
                                 </td>
                                 <td>
                                     <span class="badge bg-info">{{ $sale->saleDetails->count() }} items</span>
                                 </td>
                                 <td>
-                                    <strong>Rp {{ number_format($sale->total_amount, 0, ',', '.') }}</strong>
+                                    <strong>Rp {{ number_format($sale->total_harga, 0, ',', '.') }}</strong>
                                 </td>
                                 <td>
                                     @switch($sale->status)

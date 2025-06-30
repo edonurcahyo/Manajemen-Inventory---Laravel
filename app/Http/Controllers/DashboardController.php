@@ -20,13 +20,11 @@ class DashboardController extends Controller
         $lowStockProducts = Product::where('stok', '<', 5)->get();
 
         // Total penjualan hari ini
-        $todaySales = Sale::whereDate('created_at', now())->sum('total_harga');
-        $totalPenjualanHariIni = Sale::whereDate('created_at', now())->sum('total_harga');
+        $todaySales = Sale::whereDate('tanggal', now())->sum('total_harga');
 
-        // Total pendapatan bulan ini
-        $monthlyRevenue = Sale::whereMonth('created_at', now()->month)
-                              ->whereYear('created_at', now()->year)
-                              ->sum('total_harga');
+        $monthlyRevenue = Sale::whereMonth('tanggal', now()->month)
+                            ->whereYear('tanggal', now()->year)
+                            ->sum('total_harga');
 
         // Penjualan terbaru
         $recentSales = Sale::with('customer')->latest()->take(5)->get();

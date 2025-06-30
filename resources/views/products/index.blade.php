@@ -48,7 +48,7 @@
                         <td>{{ $product->category->nama_kategori ?? '-' }}</td>
                         <td>
                             <span class="badge {{ $product->stok <= $product->minimum_stock ? 'bg-danger' : 'bg-success' }}">
-                                {{ $product->stock_quantity }}
+                                {{ $product->stok}}
                             </span>
                         </td>
                         <td>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</td>

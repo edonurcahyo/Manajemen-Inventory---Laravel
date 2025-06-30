@@ -91,8 +91,8 @@
                             @forelse($recentSales ?? [] as $sale)
                             <tr>
                                 <td>{{ $sale->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $sale->customer->name ?? 'Walk-in Customer' }}</td>
-                                <td>Rp {{ number_format($sale->total_amount, 0, ',', '.') }}</td>
+                                <td>{{ $sale->customer->name ?? 'Pelanggan Langsung' }}</td>
+                                <td>Rp {{ number_format($sale->total_harga, 0, ',', '.') }}</td>
                                 <td>
                                     <span class="badge bg-{{ $sale->status === 'completed' ? 'success' : ($sale->status === 'pending' ? 'warning' : 'secondary') }}">
                                         {{ ucfirst($sale->status) }}
@@ -123,7 +123,7 @@
                 <div class="d-flex align-items-center mb-3">
                     <div class="flex-grow-1">
                         <h6 class="mb-1">{{ $product->nama_produk }}</h6>
-                        <small class="text-muted">Stock: {{ $product->stock_quantity }}</small>
+                        <small class="text-muted">Stok: {{ $product->stok }}</small>
                     </div>
                     <span class="badge bg-warning">Low</span>
                 </div>
@@ -136,7 +136,7 @@
 </div>
 
 <!-- Sales Chart -->
-<div class="row mt-4">
+<!-- <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -148,10 +148,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 @endsection
 
-@section('scripts')
+<!-- @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('salesChart').getContext('2d');
@@ -231,5 +231,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script>
+</script> -->
 @endsection

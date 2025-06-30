@@ -78,11 +78,15 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 text-center">
-                            <div class="h4 mb-0 text-primary">{{ $totalSales ?? 0 }}</div>
+                            <div class="h4 mb-0 text-primary">
+                                {{ 'Rp ' . number_format($totalSales ?? 0, 0, ',', '.') }}
+                            </div>
                             <div class="text-xs text-gray-600">Total Penjualan Bulan Ini</div>
                         </div>
                         <div class="col-md-3 text-center">
-                            <div class="h4 mb-0 text-success">{{ $totalPurchases ?? 0 }}</div>
+                            <div class="h4 mb-0 text-success">
+                                {{ 'Rp ' . number_format($totalPurchases ?? 0, 0, ',', '.') }}
+                            </div>
                             <div class="text-xs text-gray-600">Total Pembelian Bulan Ini</div>
                         </div>
                         <div class="col-md-3 text-center">
@@ -90,7 +94,9 @@
                             <div class="text-xs text-gray-600">Produk Stok Rendah</div>
                         </div>
                         <div class="col-md-3 text-center">
-                            <div class="h4 mb-0 text-warning">{{ $totalRevenue ?? 0 }}</div>
+                            <div class="h4 mb-0 text-warning">
+                                {{ 'Rp ' . number_format($totalRevenue ?? 0, 0, ',', '.') }}
+                            </div>
                             <div class="text-xs text-gray-600">Pendapatan Bulan Ini</div>
                         </div>
                     </div>

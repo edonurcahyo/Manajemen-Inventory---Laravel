@@ -22,7 +22,7 @@
                                         <option value="">-- Pilih Supplier --</option>
                                         @foreach($suppliers as $supplier)
                                             <option value="{{ $supplier->id }}" {{ $purchase->supplier_id == $supplier->id ? 'selected' : '' }}>
-                                                {{ $supplier->nama }}
+                                                {{ $supplier->nama_supplier }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -50,11 +50,11 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="total_harga">Total Harga</label>
-                                    <input type="number" name="total_harga" id="total_harga" class="form-control" value="{{ $purchase->total_harga }}" readonly>
+                                    <input type="text" name="total_harga" id="total_harga" class="form-control" 
+                                        value="Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}" readonly>
                                 </div>
                             </div>
                         </div>
-
                         <h5>Detail Pembelian</h5>
                         <div class="table-responsive">
                             <table class="table table-bordered">
