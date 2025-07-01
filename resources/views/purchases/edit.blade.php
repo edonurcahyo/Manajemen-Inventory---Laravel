@@ -41,9 +41,9 @@
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="pending" {{ $purchase->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="completed" {{ $purchase->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                        <option value="cancelled" {{ $purchase->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                        <option value="pending" {{ $purchase->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                        <option value="completed" {{ $purchase->status == 'completed' ? 'selected' : '' }}>Selesai</option>
+                                        <option value="cancelled" {{ $purchase->status == 'cancelled' ? 'selected' : '' }}>Batal</option>
                                     </select>
                                 </div>
                             </div>

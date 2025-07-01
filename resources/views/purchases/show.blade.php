@@ -31,7 +31,7 @@
                                 <tr>
                                     <td>Status</td>
                                     <td>: 
-                                        <span class="badge badge-{{ $purchase->status == 'completed' ? 'success' : ($purchase->status == 'pending' ? 'warning' : 'danger') }}">
+                                        <span class="badge bg-{{ $purchase->status == 'completed' ? 'success' : ($purchase->status == 'pending' ? 'warning' : 'danger') }}">
                                             {{ ucfirst($purchase->status) }}
                                         </span>
                                     </td>

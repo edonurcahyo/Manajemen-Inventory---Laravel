@@ -15,6 +15,14 @@
                 <input type="text" name="nama_produk" class="form-control" value="{{ old('nama_produk', $product->nama_produk) }}" required>
             </div>
 
+            <!-- <div class="mb-3">
+                        <label for="description" class="form-label">Deskripsi</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div> -->
+
             <div class="mb-3">
                 <label for="category_id" class="form-label">Kategori</label>
                 <select name="category_id" class="form-select" required>

@@ -108,11 +108,11 @@
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 @if($purchase->status == 'pending')
-                                <button type="button" class="btn btn-sm btn-outline-success" onclick="updateStatus({{ $purchase->id }}, 'completed')" title="Selesai">
+                                <button type="button" class="btn btn-sm btn-outline-success" onclick="updateStatus('{{ $purchase->id }}', 'completed')" title="Selesai">
                                     <i class="fas fa-check"></i>
                                 </button>
                                 @endif
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePurchase({{ $purchase->id }})" title="Hapus">
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePurchase('{{ $purchase->id }}')" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>

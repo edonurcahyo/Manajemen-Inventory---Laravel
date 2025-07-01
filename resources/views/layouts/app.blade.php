@@ -10,7 +10,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
 
-
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -103,13 +102,19 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1">
             <!-- Topbar -->
-            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 border-bottom pb-2 gap-2">
                 <div class="d-flex align-items-center">
                     <button class="burger-btn d-md-none me-3" id="toggleSidebar">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 class="h2 mb-0">@yield('page-title', 'Dashboard')</h1>
                 </div>
+
+                @hasSection('page-actions')
+                    <div>
+                        @yield('page-actions')
+                    </div>
+                @endif
 
                 <!-- User Dropdown -->
                 <div class="dropdown">
@@ -161,6 +166,7 @@
             appWrapper.classList.toggle('sidebar-hidden');
         });
     </script>
+
     @yield('scripts')
 </body>
 </html>

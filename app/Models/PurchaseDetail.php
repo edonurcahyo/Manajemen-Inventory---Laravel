@@ -17,6 +17,7 @@ class PurchaseDetail extends Model
         'jumlah',
         'harga_beli',
         'subtotal',
+        'status',
     ];
 
     public function purchase()

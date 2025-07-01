@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Add Product - CV. Agung')
-@section('page-title', 'Add New Product')
+@section('page-title', 'Tambah Produk Baru')
 
 @section('content')
 <div class="row">
@@ -46,13 +46,13 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div> -->
 
                     <div class="row">
                         <div class="col-md-4">

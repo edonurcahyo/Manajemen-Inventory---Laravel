@@ -85,7 +85,11 @@
                                                     <select class="form-control product-select" name="items[0][product_id]" required>
                                                         <option value="">Pilih Produk</option>
                                                         @foreach($products as $product)
-                                                        <option value="{{ $product->id }}" data-price="{{ $product->harga_jual }}" data-stock="{{ $product->stok }}">{{ $product->nama_produk }}</option>
+                                                        <option value="{{ $product->id }}" 
+                                                                data-price="{{ $product->harga_jual }}" 
+                                                                data-stock="{{ $product->stok }}">
+                                                            {{ $product->nama_produk }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </td>
@@ -93,13 +97,13 @@
                                                     <span class="available-stock">-</span>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control quantity-input" name="items[0][quantity]" min="1" step="1" required>
+                                                    <input type="number" class="form-control quantity-input" name="items[0][quantity]" min="1" value="1" step="1" required>
                                                 </td>
                                                 <td>
                                                     <input type="number" class="form-control price-input" name="items[0][unit_price]" min="0" step="0.01" required>
                                                 </td>
                                                 <td>
-                                                    <span class="item-total">0.00</span>
+                                                    <span class="item-total" data-value="0">0.00</span>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-danger btn-sm remove-item" disabled>
@@ -191,9 +195,13 @@ $(document).ready(function() {
             <tr class="item-row">
                 <td>
                     <select class="form-control product-select" name="items[${itemIndex}][product_id]" required>
-                        <option value="">Select Product</option>
+                        <option value="">Pilih Produk</option>
                         @foreach($products as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->harga_jual }}" data-stock="{{ $product->stok }}">{{ $product->nama_produk }} ({{ $product->kode_produk }})</option>
+                            <option value="{{ $product->id }}" 
+                                    data-price="{{ $product->harga_jual }}" 
+                                    data-stock="{{ $product->stok }}">
+                                {{ $product->nama_produk }}
+                            </option>
                         @endforeach
                     </select>
                 </td>
@@ -201,7 +209,7 @@ $(document).ready(function() {
                     <span class="available-stock">-</span>
                 </td>
                 <td>
-                    <input type="number" class="form-control quantity-input" name="items[${itemIndex}][quantity]" min="1" step="1" required>
+                    <input type="number" class="form-control quantity-input" name="items[${itemIndex}][quantity]" min="1" value="1" step="1" required>
                 </td>
                 <td>
                     <input type="number" class="form-control price-input" name="items[${itemIndex}][unit_price]" min="0" step="0.01" required>
@@ -220,6 +228,12 @@ $(document).ready(function() {
         $('#saleItemsTable tbody').append(newRow);
         itemIndex++;
         updateRemoveButtons();
+        
+        // Initialize Select2 for new row
+        $('#saleItemsTable tbody tr:last-child').find('.product-select').select2();
+        
+        // Trigger change event to update price and stock
+        $('#saleItemsTable tbody tr:last-child').find('.product-select').trigger('change');
     });
     
     // Remove item row
@@ -235,28 +249,29 @@ $(document).ready(function() {
         $('.remove-item').prop('disabled', rowCount <= 1);
     }
     
-    // Product selection change
-    $(document).on('change', '.product-select', function() {
+    // Product selection change - update price and stock immediately
+    $('#saleItemsTable tbody tr:last-child').find('.product-select').select2().on('change', function() {
         const selectedOption = $(this).find('option:selected');
-        const price = selectedOption.data('price') || 0;
-        const stock = selectedOption.data('stock') || 0;
+        const price = parseFloat(selectedOption.data('price')) || 0;
+        const stock = parseFloat(selectedOption.data('stock')) || 0;
         const row = $(this).closest('tr');
-        
-        row.find('.price-input').val(price);
+
+        row.find('.price-input').val(price.toFixed(2));
         row.find('.available-stock').text(stock);
-        row.find('.quantity-input').attr('max', stock);
+        row.find('.quantity-input').attr('max', stock).val(1);
         
         calculateRowTotal(row);
     });
+
     
-    // Quantity or price change
-    $(document).on('input', '.quantity-input, .price-input', function() {
+    // Quantity or price change - update totals immediately
+    $(document).on('input change', '.quantity-input, .price-input', function() {
         const row = $(this).closest('tr');
         calculateRowTotal(row);
     });
     
-    // Tax and discount change
-    $('#tax_percentage, #discount').on('input', function() {
+    // Tax or discount change - update totals immediately
+    $(document).on('input change', '#tax_percentage, #discount', function() {
         calculateTotals();
     });
     
@@ -265,35 +280,34 @@ $(document).ready(function() {
         const quantity = parseFloat(row.find('.quantity-input').val()) || 0;
         const price = parseFloat(row.find('.price-input').val()) || 0;
         const total = quantity * price;
-        
-        row.find('.item-total').text(total.toFixed(2));
+
+        row.find('.item-total').text(total.toFixed(2)).attr('data-value', total); // ← fix
         calculateTotals();
     }
-    
+
     // Calculate all totals
     function calculateTotals() {
         let subtotal = 0;
-        
+
         $('.item-total').each(function() {
-            subtotal += parseFloat($(this).text()) || 0;
+            subtotal += parseFloat($(this).attr('data-value')) || 0;
         });
-        
+
         const taxPercentage = parseFloat($('#tax_percentage').val()) || 0;
         const discount = parseFloat($('#discount').val()) || 0;
-        
+
         const taxAmount = (subtotal * taxPercentage) / 100;
         const totalAmount = subtotal + taxAmount - discount;
-        
+
         $('#subtotal').text(subtotal.toFixed(2));
         $('#tax_amount').text(taxAmount.toFixed(2));
         $('#total_amount').text(totalAmount.toFixed(2));
-        
-        // Update hidden fields
+
         $('#subtotal_amount').val(subtotal.toFixed(2));
         $('#tax_amount_hidden').val(taxAmount.toFixed(2));
         $('#total_amount_hidden').val(totalAmount.toFixed(2));
     }
-    
+
     // Form validation
     $('#saleForm').on('submit', function(e) {
         let isValid = true;
@@ -302,7 +316,7 @@ $(document).ready(function() {
         // Check if at least one item is added
         if ($('#saleItemsTable tbody tr').length === 0) {
             isValid = false;
-            errorMessage += 'Please add at least one item to the sale.\n';
+            errorMessage += 'Harap tambahkan minimal satu item produk.\n';
         }
         
         // Check stock availability
@@ -313,7 +327,7 @@ $(document).ready(function() {
             
             if (quantity > availableStock) {
                 isValid = false;
-                errorMessage += `Insufficient stock for ${productName}. Available: ${availableStock}, Requested: ${quantity}\n`;
+                errorMessage += `Stok tidak mencukupi untuk ${productName}. Stok tersedia: ${availableStock}, Jumlah diminta: ${quantity}\n`;
             }
         });
         
@@ -323,8 +337,8 @@ $(document).ready(function() {
         }
     });
     
-    // Initialize calculations
-    calculateTotals();
+    // Initialize calculations on page load
+    $('.product-select').trigger('change');
 });
 </script>
 @endpush
