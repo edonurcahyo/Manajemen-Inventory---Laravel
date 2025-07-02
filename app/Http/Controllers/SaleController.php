@@ -19,8 +19,9 @@ class SaleController extends Controller
 
     public function create()
     {
+        $products = Product::all(); // Pastikan model Product memiliki kolom 'stok'
         $customers = Customer::all();
-        $products = Product::all(); // Tanpa map juga sudah cukup
+        $products = Product::all(); 
 
         $lastSale = Sale::latest()->first();
         $nextId = $lastSale ? $lastSale->id + 1 : 1;
@@ -31,49 +32,56 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'kode_penjualan' => 'required|unique:sales,kode_penjualan',
+            'customer_id' => 'nullable|exists:customers,id',
             'sale_date' => 'required|date',
-            'status' => 'required|string',
-            'items' => 'required|array',
+            'status' => 'required|in:pending,completed,cancelled',
+            'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|numeric|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
+            'tax_percentage' => 'nullable|numeric|min:0|max:100',
+            'discount' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
         ]);
 
-        $subtotal = 0;
-        foreach ($request->items as $item) {
-            $subtotal += $item['quantity'] * $item['unit_price'];
-        }
+        // Hitung subtotal dari items
+        $subtotal = collect($validated['items'])->sum(function($item) {
+            return $item['quantity'] * $item['unit_price'];
+        });
 
-        $tax = ($request->tax_percentage ?? 0) * $subtotal / 100;
-        $discount = $request->discount ?? 0;
-        $total = $subtotal + $tax - $discount;
-
+        // Buat record penjualan
         $sale = Sale::create([
-            'kode_penjualan' => $request->kode_penjualan,
-            'customer_id' => $request->customer_id,
-            'tanggal' => $request->sale_date,
-            'total_harga' => $total,
+            'kode_penjualan' => $validated['kode_penjualan'],
+            'customer_id' => $validated['customer_id'],
+            'tanggal' => $validated['sale_date'],
+            'subtotal_amount' => $subtotal,
+            'tax_percentage' => $validated['tax_percentage'] ?? 0,
+            'tax_amount' => ($validated['tax_percentage'] ?? 0) * $subtotal / 100,
+            'discount_amount' => $validated['discount'] ?? 0,
+            'total_harga' => $subtotal + (($validated['tax_percentage'] ?? 0) * $subtotal / 100) - ($validated['discount'] ?? 0),
             'user_id' => Auth::id(),
-            'status' => $request->status,
+            'status' => $validated['status'],
+            'notes' => $validated['notes'] ?? null,
         ]);
 
-        foreach ($request->items as $item) {
-            SaleDetail::create([
-                'sale_id' => $sale->id,
+        // Simpan detail penjualan dan update stok
+        foreach ($validated['items'] as $item) {
+            $sale->saleDetails()->create([
                 'product_id' => $item['product_id'],
                 'jumlah' => $item['quantity'],
                 'harga_jual' => $item['unit_price'],
                 'subtotal' => $item['quantity'] * $item['unit_price'],
             ]);
 
+            // Update stok produk
             $product = Product::find($item['product_id']);
             $product->stok -= $item['quantity'];
             $product->save();
         }
 
-        return redirect()->route('sales.index')->with('success', 'Penjualan berhasil disimpan!');
+        return redirect()->route('sales.index')->with('success', 'Penjualan berhasil dibuat!');
     }
 
     public function show($id)

@@ -18,8 +18,8 @@
                 <form action="{{ route('sales.store') }}" method="POST" id="saleForm">
                     @csrf
                     <div class="card-body">
+                        <!-- Customer and Date Section -->
                         <div class="row">
-                            <!-- Customer Information -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="customer_id">Pelanggan <span class="text-muted">(Opsional)</span></label>
@@ -31,8 +31,6 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                            <!-- Sale Date -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="sale_date">Tanggal Penjualan <span class="text-danger">*</span></label>
@@ -41,16 +39,14 @@
                             </div>
                         </div>
 
+                        <!-- Invoice and Status Section -->
                         <div class="row">
-                            <!-- Invoice Number -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="kode_penjualan">Kode Penjualan <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="kode_penjualan" name="kode_penjualan" value="{{ $kode_penjualan }}" readonly>
                                 </div>
                             </div>
-                            
-                            <!-- Status -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">Status <span class="text-danger">*</span></label>
@@ -66,7 +62,7 @@
                         <!-- Products Section -->
                         <div class="row">
                             <div class="col-12">
-                                <h5 class="mb-3">Penjualan</h5>
+                                <h5 class="mb-3">Detail Penjualan</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="saleItemsTable">
                                         <thead class="thead-light">
@@ -103,7 +99,7 @@
                                                     <input type="number" class="form-control price-input" name="items[0][unit_price]" min="0" step="0.01" required>
                                                 </td>
                                                 <td>
-                                                    <span class="item-total" data-value="0">0.00</span>
+                                                    <span class="item-total">0.00</span>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-danger btn-sm remove-item" disabled>
@@ -115,43 +111,43 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4" class="text-right"><strong>Subtotal:</strong></td>
-                                                <td><strong id="subtotal">0.00</strong></td>
+                                                <td><span id="subtotal">0.00</span></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right"><strong>Pajak (%):</strong></td>
                                                 <td>
-                                                    <input type="number" class="form-control" id="tax_percentage" name="tax_percentage" min="0" max="100" step="0.01" value="0">
+                                                    <input type="number" class="form-control tax-input" id="tax_percentage" name="tax_percentage" min="0" max="100" step="0.01" value="0">
                                                 </td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right"><strong>Jumlah Pajak:</strong></td>
-                                                <td><strong id="tax_amount">0.00</strong></td>
+                                                <td><span id="tax_amount">0.00</span></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right"><strong>Diskon:</strong></td>
                                                 <td>
-                                                    <input type="number" class="form-control" id="discount" name="discount" min="0" step="0.01" value="0">
+                                                    <input type="number" class="form-control discount-input" id="discount" name="discount" min="0" step="0.01" value="0">
                                                 </td>
                                                 <td></td>
                                             </tr>
                                             <tr class="table-success">
-                                                <td colspan="4" class="text-right"><strong>Total Amount:</strong></td>
-                                                <td><strong id="total_amount">0.00</strong></td>
+                                                <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                                                <td><span id="total_amount">0.00</span></td>
                                                 <td></td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
-                                <button type="button" class="btn btn-success btn-sm" id="addItem">
+                                <button type="button" class="btn btn-success btn-sm mt-2" id="addItem">
                                     <i class="fas fa-plus"></i> Tambah Item
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Notes -->
+                        <!-- Notes Section -->
                         <div class="row mt-3">
                             <div class="col-12">
                                 <div class="form-group">
@@ -161,15 +157,15 @@
                             </div>
                         </div>
 
-                        <!-- Hidden fields for totals -->
-                        <input type="hidden" id="subtotal_amount" name="subtotal_amount" value="0">
+                        <!-- Hidden fields -->
+                        <input type="hidden" id="subtotal_hidden" name="subtotal_amount" value="0">
                         <input type="hidden" id="tax_amount_hidden" name="tax_amount" value="0">
                         <input type="hidden" id="total_amount_hidden" name="total_amount" value="0">
                     </div>
                     
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Buat Penjualan
+                            <i class="fas fa-save"></i> Simpan Penjualan
                         </button>
                         <a href="{{ route('sales.index') }}" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Batal
@@ -180,6 +176,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('scripts')
 <script>
@@ -232,15 +229,71 @@ $(document).ready(function() {
         // Initialize Select2 for new row
         $('#saleItemsTable tbody tr:last-child').find('.product-select').select2();
         
-        // Trigger change event to update price and stock
-        $('#saleItemsTable tbody tr:last-child').find('.product-select').trigger('change');
+        // Initialize events for new row
+        initRowEvents($('#saleItemsTable tbody tr:last-child'));
     });
+    
+    // Initialize events for first row
+    initRowEvents($('#saleItemsTable tbody tr:first-child'));
+    
+    function initRowEvents(row) {
+        // Product selection change
+        row.find('.product-select').on('change', function() {
+            const selectedOption = $(this).find('option:selected');
+            const price = parseFloat(selectedOption.data('price')) || 0;
+            const stock = parseInt(selectedOption.data('stock')) || 0;
+            const row = $(this).closest('tr');
+
+            // Update price and stock display
+            row.find('.price-input').val(price.toFixed(2));
+            row.find('.available-stock').text(stock);
+            
+            // Set quantity and validate
+            const quantityInput = row.find('.quantity-input');
+            quantityInput.attr('max', stock).val(stock > 0 ? 1 : 0);
+            
+            // Visual feedback for stock
+            if (stock <= 0) {
+                row.find('.available-stock').addClass('text-danger');
+                quantityInput.prop('disabled', true);
+            } else {
+                row.find('.available-stock').removeClass('text-danger');
+                quantityInput.prop('disabled', false);
+            }
+            
+            calculateRowTotal(row);
+        });
+
+        // Quantity or price change
+        row.find('.quantity-input, .price-input').on('input', function() {
+            validateQuantity($(this).closest('tr'));
+            calculateRowTotal($(this).closest('tr'));
+        });
+    }
+    
+    // Validate quantity against available stock
+    function validateQuantity(row) {
+        const quantity = parseInt(row.find('.quantity-input').val()) || 0;
+        const stock = parseInt(row.find('.available-stock').text()) || 0;
+        
+        if (quantity > stock) {
+            row.find('.quantity-input').addClass('is-invalid');
+            row.find('.available-stock').addClass('text-danger');
+            return false;
+        } else {
+            row.find('.quantity-input').removeClass('is-invalid');
+            row.find('.available-stock').removeClass('text-danger');
+            return true;
+        }
+    }
     
     // Remove item row
     $(document).on('click', '.remove-item', function() {
-        $(this).closest('tr').remove();
-        updateRemoveButtons();
-        calculateTotals();
+        if($('#saleItemsTable tbody tr').length > 1) {
+            $(this).closest('tr').remove();
+            updateRemoveButtons();
+            calculateTotals();
+        }
     });
     
     // Update remove buttons state
@@ -249,97 +302,86 @@ $(document).ready(function() {
         $('.remove-item').prop('disabled', rowCount <= 1);
     }
     
-    // Product selection change - update price and stock immediately
-    $('#saleItemsTable tbody tr:last-child').find('.product-select').select2().on('change', function() {
-        const selectedOption = $(this).find('option:selected');
-        const price = parseFloat(selectedOption.data('price')) || 0;
-        const stock = parseFloat(selectedOption.data('stock')) || 0;
-        const row = $(this).closest('tr');
-
-        row.find('.price-input').val(price.toFixed(2));
-        row.find('.available-stock').text(stock);
-        row.find('.quantity-input').attr('max', stock).val(1);
-        
-        calculateRowTotal(row);
-    });
-
-    
-    // Quantity or price change - update totals immediately
-    $(document).on('input change', '.quantity-input, .price-input', function() {
-        const row = $(this).closest('tr');
-        calculateRowTotal(row);
-    });
-    
-    // Tax or discount change - update totals immediately
-    $(document).on('input change', '#tax_percentage, #discount', function() {
-        calculateTotals();
-    });
-    
     // Calculate row total
     function calculateRowTotal(row) {
         const quantity = parseFloat(row.find('.quantity-input').val()) || 0;
         const price = parseFloat(row.find('.price-input').val()) || 0;
         const total = quantity * price;
 
-        row.find('.item-total').text(total.toFixed(2)).attr('data-value', total); // ← fix
+        row.find('.item-total').text(total.toFixed(2)).data('value', total);
         calculateTotals();
     }
 
     // Calculate all totals
     function calculateTotals() {
         let subtotal = 0;
+        let allValid = true;
 
-        $('.item-total').each(function() {
-            subtotal += parseFloat($(this).attr('data-value')) || 0;
+        $('.item-row').each(function() {
+            const total = parseFloat($(this).find('.item-total').data('value')) || 0;
+            subtotal += total;
+            
+            // Check if any row has invalid quantity
+            if (!validateQuantity($(this))) {
+                allValid = false;
+            }
         });
 
         const taxPercentage = parseFloat($('#tax_percentage').val()) || 0;
         const discount = parseFloat($('#discount').val()) || 0;
-
         const taxAmount = (subtotal * taxPercentage) / 100;
         const totalAmount = subtotal + taxAmount - discount;
 
-        $('#subtotal').text(subtotal.toFixed(2));
-        $('#tax_amount').text(taxAmount.toFixed(2));
-        $('#total_amount').text(totalAmount.toFixed(2));
+        // Update display with proper formatting
+        $('#subtotal').text(subtotal.toLocaleString('id-ID', {minimumFractionDigits: 2}));
+        $('#tax_amount').text(taxAmount.toLocaleString('id-ID', {minimumFractionDigits: 2}));
+        $('#total_amount').text(totalAmount.toLocaleString('id-ID', {minimumFractionDigits: 2}));
 
-        $('#subtotal_amount').val(subtotal.toFixed(2));
+        // Update hidden fields
+        $('#subtotal_hidden').val(subtotal.toFixed(2));
         $('#tax_amount_hidden').val(taxAmount.toFixed(2));
         $('#total_amount_hidden').val(totalAmount.toFixed(2));
+
+        // Enable/disable submit button based on validation
+        $('#saleForm button[type="submit"]').prop('disabled', !allValid);
     }
+
+    // Tax or discount change
+    $(document).on('input', '#tax_percentage, #discount', function() {
+        calculateTotals();
+    });
 
     // Form validation
     $('#saleForm').on('submit', function(e) {
         let isValid = true;
-        let errorMessage = '';
+        let errorMessages = [];
         
         // Check if at least one item is added
         if ($('#saleItemsTable tbody tr').length === 0) {
             isValid = false;
-            errorMessage += 'Harap tambahkan minimal satu item produk.\n';
+            errorMessages.push('Harap tambahkan minimal satu item produk');
         }
         
         // Check stock availability
         $('.item-row').each(function() {
             const quantity = parseFloat($(this).find('.quantity-input').val()) || 0;
-            const availableStock = parseFloat($(this).find('.available-stock').text()) || 0;
+            const availableStock = parseInt($(this).find('.available-stock').text()) || 0;
             const productName = $(this).find('.product-select option:selected').text();
             
             if (quantity > availableStock) {
                 isValid = false;
-                errorMessage += `Stok tidak mencukupi untuk ${productName}. Stok tersedia: ${availableStock}, Jumlah diminta: ${quantity}\n`;
+                errorMessages.push(`Stok tidak mencukupi untuk ${productName} (Stok: ${availableStock}, Jumlah: ${quantity})`);
             }
         });
         
         if (!isValid) {
             e.preventDefault();
-            alert(errorMessage);
+            alert('Kesalahan:\n\n' + errorMessages.join('\n'));
         }
     });
-    
+
     // Initialize calculations on page load
-    $('.product-select').trigger('change');
+    $('.product-select').first().trigger('change');
 });
 </script>
 @endpush
-@endsection

@@ -97,11 +97,11 @@
                                         <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Hapus" onclick="deleteSale({{ $sale->id }})">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Hapus" onclick="deleteSale('{{ $sale->id }}')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                         @if($sale->status === 'pending')
-                                        <button type="button" class="btn btn-sm btn-outline-success" title="Complete Sale" onclick="completeSale({{ $sale->id }})">
+                                        <button type="button" class="btn btn-sm btn-outline-success" title="Complete Sale" onclick="completeSale('{{ $sale->id }}')">
                                             <i class="fas fa-check"></i>
                                         </button>
                                         @endif
