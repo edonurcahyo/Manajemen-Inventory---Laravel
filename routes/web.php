@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     SaleController,
     ReportController,
     UserController,
-    SupplierController
+    SupplierController,
+    NotificationController
 };
 
 /*
@@ -72,4 +73,9 @@ Route::middleware('auth')->group(function () {
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Notifikasi
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.mark-as-read');
 });
