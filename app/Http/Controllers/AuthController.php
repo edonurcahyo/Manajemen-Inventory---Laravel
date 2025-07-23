@@ -37,7 +37,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+   public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255|unique:users',
@@ -55,12 +55,14 @@ class AuthController extends Controller
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // default role
+            'role' => 'staff',
         ]);
 
-        Auth::login($user);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect('/dashboard');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
     public function logout(Request $request)

@@ -91,7 +91,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
         }
 
-        $user->save(); // ✅
+        $user->save();
 
         return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui');
     }
