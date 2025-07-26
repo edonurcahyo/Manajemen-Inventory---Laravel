@@ -36,7 +36,6 @@ class ProductController extends Controller
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
-            // 'deskripsi' => 'nullable|string|max:1000',
         ]);
 
         $product = new Product();
@@ -47,8 +46,6 @@ class ProductController extends Controller
         $product->harga_beli = $validated['harga_beli'];
         $product->harga_jual = $validated['harga_jual'];
         $product->stok = $validated['stok'];
-        // $product->deskripsi = $validated['deskripsi'] ?? null;
-
         $product->save();
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
@@ -59,5 +56,52 @@ class ProductController extends Controller
         $lastProduct = Product::orderBy('id', 'desc')->first();
         $nextNumber = $lastProduct ? ($lastProduct->id + 1) : 1;
         return 'PRD-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+    }
+
+    // ✅ Menampilkan detail produk
+    public function show($id)
+    {
+        $product = Product::with('category')->findOrFail($id);
+        return view('products.show', compact('product'));
+    }
+
+    // ✅ Form edit
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $categories = Category::all();
+        return view('products.edit', compact('product', 'categories'));
+    }
+
+    // ✅ Proses update
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'satuan' => 'required|string|max:50',
+            'harga_beli' => 'required|numeric|min:0',
+            'harga_jual' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->nama_produk = $validated['nama_produk'];
+        $product->category_id = $validated['category_id'];
+        $product->satuan = $validated['satuan'];
+        $product->harga_beli = $validated['harga_beli'];
+        $product->harga_jual = $validated['harga_jual'];
+        $product->stok = $validated['stok'];
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
+    }
+
+    // ✅ Hapus produk
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus!');
     }
 }
