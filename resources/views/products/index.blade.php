@@ -7,11 +7,15 @@
 <div class="card">
     <div class="card-header">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <!-- Tombol Tambah Produk -->
+            <!-- Tombol Tambah Produk & Kategori -->
+        <div class="d-flex flex-wrap gap-2">
             <a href="{{ route('products.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-1"></i> Tambah Produk Baru
             </a>
-
+            <a href="{{ route('categories.create') }}" class="btn btn-success">
+                <i class="fas fa-tags me-1"></i> Tambah Kategori Baru
+            </a>
+        </div>
             <!-- Form Pencarian -->
             <form method="GET" class="d-flex" role="search">
                 <input type="text" name="search" class="form-control me-2" placeholder="Cari produk..." value="{{ request('search') }}">

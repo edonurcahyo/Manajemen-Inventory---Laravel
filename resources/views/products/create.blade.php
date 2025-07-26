@@ -1,130 +1,157 @@
 @extends('layouts.app')
 
-@section('title', 'Add Product - CV. Agung')
+@section('title', 'Tambah Produk - CV. Agung')
 @section('page-title', 'Tambah Produk Baru')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-body">
-                <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
-                    @csrf
-                    <div class="row">
-                        <!-- <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="code" class="form-label">Kode Produk *</label>
-                                <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" name="code" value="{{ old('code') }}" required>
-                                @error('code')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div> -->
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="categories_id" class="form-label">Kategori *</label>
-                                <select class="form-select @error('categories_id') is-invalid @enderror" id="categories_id" name="categories_id" required>
-                                    <option value="">Pilih Kategori</option>
-                                    @foreach($categories ?? [] as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->nama_kategori }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Form Tambah Produk</h5>
+    </div>
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nama Produk *</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
-                        @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ route('products.store') }}">
+            @csrf
 
-                    <!-- <div class="mb-3">
-                        <label for="description" class="form-label">Deskripsi</label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3">{{ old('description') }}</textarea>
-                        @error('description')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div> -->
+            <div class="row">
+                {{-- Kode Produk --}}
+                <div class="col-md-6 mb-3">
+                    <label for="kode_produk" class="form-label">Kode Produk</label>
+                    <input type="text" 
+                           name="kode_produk" 
+                           id="kode_produk" 
+                           class="form-control @error('kode_produk') is-invalid @enderror" 
+                           value="{{ old('kode_produk') }}" 
+                           readonly>
+                    <small class="text-muted">Kode produk akan digenerate otomatis</small>
+                    @error('kode_produk')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="purchase_price" class="form-label">Harga Beli *</label>
-                                <input type="number" class="form-control @error('purchase_price') is-invalid @enderror" id="purchase_price" name="purchase_price" value="{{ old('purchase_price') }}" step="0.01" required>
-                                @error('purchase_price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="selling_price" class="form-label">Harga Jual *</label>
-                                <input type="number" class="form-control @error('selling_price') is-invalid @enderror" id="selling_price" name="selling_price" value="{{ old('selling_price') }}" step="0.01" required>
-                                @error('selling_price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="unit" class="form-label">Satuan *</label>
-                                <input type="text" class="form-control @error('unit') is-invalid @enderror" id="unit" name="unit" value="{{ old('unit') }}" placeholder="pcs, kg, box, etc." required>
-                                @error('unit')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="stock_quantity" class="form-label">Stok Awal *</label>
-                                <input type="number" class="form-control @error('stock_quantity') is-invalid @enderror" id="stock_quantity" name="stock_quantity" value="{{ old('stock_quantity', 0) }}" required>
-                                @error('stock_quantity')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="minimum_stock" class="form-label">Minimum Stock *</label>
-                                <input type="number" class="form-control @error('minimum_stock') is-invalid @enderror" id="minimum_stock" name="minimum_stock" value="{{ old('minimum_stock', 0) }}" required>
-                                @error('minimum_stock')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <!-- <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="is_active">
-                                Active Product
-                            </label>
-                        </div>
-                    </div> -->
-
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('products.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Kembali
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Simpan Produk
-                        </button>
-                    </div>
-                </form>
+                {{-- Nama Produk --}}
+                <div class="col-md-6 mb-3">
+                    <label for="nama_produk" class="form-label">Nama Produk <span class="text-danger">*</span></label>
+                    <input type="text" 
+                           class="form-control @error('nama_produk') is-invalid @enderror" 
+                           id="nama_produk" 
+                           name="nama_produk" 
+                           value="{{ old('nama_produk') }}" 
+                           required>
+                    @error('nama_produk')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
-        </div>
+
+            <div class="row">
+                {{-- Kategori --}}
+                <div class="col-md-6 mb-3">
+                    <label for="category_id" class="form-label">Kategori <span class="text-danger">*</span></label>
+                    <select class="form-select @error('category_id') is-invalid @enderror" 
+                            id="category_id" 
+                            name="category_id" 
+                            required>
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" 
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->nama_kategori }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Satuan --}}
+                <div class="col-md-6 mb-3">
+                    <label for="satuan" class="form-label">Satuan <span class="text-danger">*</span></label>
+                    <input type="text" 
+                           class="form-control @error('satuan') is-invalid @enderror" 
+                           id="satuan" 
+                           name="satuan" 
+                           value="{{ old('satuan') }}" 
+                           required>
+                    @error('satuan')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row">
+                {{-- Harga Beli --}}
+                <div class="col-md-6 mb-3">
+                    <label for="harga_beli" class="form-label">Harga Beli <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">Rp</span>
+                        <input type="number" 
+                               class="form-control @error('harga_beli') is-invalid @enderror" 
+                               id="harga_beli" 
+                               name="harga_beli" 
+                               value="{{ old('harga_beli') }}" 
+                               required>
+                        @error('harga_beli')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- Harga Jual --}}
+                <div class="col-md-6 mb-3">
+                    <label for="harga_jual" class="form-label">Harga Jual <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">Rp</span>
+                        <input type="number" 
+                               class="form-control @error('harga_jual') is-invalid @enderror" 
+                               id="harga_jual" 
+                               name="harga_jual" 
+                               value="{{ old('harga_jual') }}" 
+                               required>
+                        @error('harga_jual')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            {{-- Stok --}}
+            <div class="mb-3">
+                <label for="stok" class="form-label">Jumlah Stok <span class="text-danger">*</span></label>
+                <input type="number" 
+                       class="form-control @error('stok') is-invalid @enderror" 
+                       id="stok" 
+                       name="stok" 
+                       value="{{ old('stok') }}" 
+                       required>
+                @error('stok')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- {{-- Deskripsi --}}
+            <div class="mb-4">
+                <label for="deskripsi" class="form-label">Deskripsi</label>
+                <textarea class="form-control @error('deskripsi') is-invalid @enderror" 
+                          id="deskripsi" 
+                          name="deskripsi" 
+                          rows="3">{{ old('deskripsi') }}</textarea>
+                @error('deskripsi')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div> -->
+
+            {{-- Tombol Aksi --}}
+            <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save me-1"></i> Simpan Produk
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
