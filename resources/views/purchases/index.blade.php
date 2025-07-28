@@ -164,7 +164,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Search
     $('#searchInput').on('keyup', function() {
@@ -228,4 +228,4 @@
         form.submit();
     }
 </script>
-@endsection
+@endpush

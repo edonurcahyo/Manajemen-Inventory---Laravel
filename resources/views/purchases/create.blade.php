@@ -100,7 +100,6 @@
 <script>
 let itemIndex = 0;
 const products = @json($products);
-
 function addItem() {
     const tbody = document.getElementById('itemsBody');
     const row = document.createElement('tr');

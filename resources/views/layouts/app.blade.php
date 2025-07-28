@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>@yield('title', 'CV. Agung - Inventory Management')</title>
 
     <!-- Bootstrap & Font Awesome -->
@@ -16,22 +16,27 @@
             --secondary-color: #2c5364;
             --accent-color: #00acc1;
             --sidebar-width: 250px;
+            --topbar-height: 60px;
         }
 
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f6f9;
             transition: background-color 0.3s;
+            overflow-x: hidden;
         }
 
+        /* Sidebar Styles */
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            transition: transform 0.3s ease-in-out;
             height: 100vh;
             position: fixed;
             overflow-y: auto;
+            z-index: 1040;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0);
         }
 
         .sidebar .nav-link {
@@ -40,6 +45,7 @@
             padding: 10px 20px;
             transition: all 0.2s ease;
             margin-bottom: 2px;
+            border-radius: 4px;
         }
 
         .sidebar .nav-link:hover,
@@ -49,79 +55,56 @@
             color: #fff;
         }
 
+        /* Main Content Area */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 2rem;
             background-color: #ffffff;
             min-height: 100vh;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        body.dark-mode .main-content {
-            background-color: #1e1e1e;
-            color: #f8f9fa;
+        /* Topbar Styles */
+        .topbar {
+            position: sticky;
+            top: 0;
+            background: inherit;
+            z-index: 1030;
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.8);
+            height: var(--topbar-height);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
-        .sidebar-hidden .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-hidden .main-content {
-            margin-left: 0;
-        }
-
+        /* Burger Button */
         .burger-btn {
             background: none;
             border: none;
             font-size: 1.5rem;
             color: inherit;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 1rem;
+            z-index: 1050;
         }
 
-        .topbar {
-            position: sticky;
-            top: 0;
-            background: inherit;
-            z-index: 1020;
-            padding: 1rem 0;
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        body.dark-mode .topbar {
-            background-color: rgba(30, 30, 30, 0.8);
-        }
-
+        /* Card Styles */
         .card {
             border: none;
             box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-            transition: transform 0.2s;
-        }
-
-        body.dark-mode .card {
-            background-color: #2d2d2d;
-            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Loading overlay */
+        /* Loading Overlay */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -135,34 +118,65 @@
             align-items: center;
         }
 
-        body.dark-mode #loading-overlay {
-            background-color: rgba(30, 30, 30, 0.8);
+        /* Mobile Overlay for Sidebar */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1035;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
         }
 
-        /* Responsive adjustments */
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                z-index: 1030;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
             }
+            
             .sidebar.sidebar-mobile-show {
                 transform: translateX(0);
             }
+            
             .main-content {
                 margin-left: 0;
+                width: 100%;
+            }
+            
+            body.sidebar-open {
+                overflow: hidden;
+            }
+            
+            .burger-btn {
+                display: block;
             }
         }
 
         @media (min-width: 769px) {
             .sidebar-hidden .sidebar {
-                transform: translateX(0);
+                transform: translateX(-100%);
             }
+            
             .sidebar-hidden .main-content {
-                margin-left: var(--sidebar-width);
+                margin-left: 0;
+            }
+            
+            .burger-btn {
+                display: none;
             }
         }
 
-                /* Dark Mode Styles - Updated Version */
+        /* Dark Mode Styles */
         body.dark-mode {
             --dark-bg: #121212;
             --dark-card: #1e1e1e;
@@ -175,143 +189,57 @@
             --dark-disabled: #2d2d2d;
         }
 
-        /* Base Elements */
-        body.dark-mode .card,
-        body.dark-mode .form-control,
-        body.dark-mode .form-select,
-        body.dark-mode .alert,
-        body.dark-mode .breadcrumb,
-        body.dark-mode .dropdown-menu,
-        body.dark-mode .modal-content,
-        body.dark-mode .list-group-item {
-            background-color: var(--dark-element) !important;
-            color: var(--dark-text) !important;
-            border-color: var(--dark-border) !important;
-        }
-
-        /* Tables - Improved Visibility */
-        body.dark-mode .table {
-            --bs-table-bg: var(--dark-element);
-            --bs-table-color: var(--dark-text);
-            --bs-table-border-color: var(--dark-border);
-            color: var(--dark-text) !important;
-        }
-
-        body.dark-mode .table th,
-        body.dark-mode .table td {
-            color: inherit !important;
-            border-color: var(--dark-border) !important;
-            background-color: var(--dark-element) !important;
-        }
-
-        body.dark-mode .table thead th,
-        body.dark-mode .table tfoot th {
-            background-color: var(--dark-header) !important;
-            color: var(--dark-text) !important;
-        }
-
-        body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
-            --bs-table-accent-bg: var(--dark-card);
+        body.dark-mode .main-content {
+            background-color: var(--dark-bg);
             color: var(--dark-text);
         }
 
-        body.dark-mode .table-hover > tbody > tr:hover {
-            --bs-table-accent-bg: var(--dark-hover);
-            color: var(--dark-text);
+        body.dark-mode .topbar {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-bottom: 1px solid var(--dark-border);
         }
 
-        /* Form Elements */
-        body.dark-mode .form-control,
-        body.dark-mode .form-select,
-        body.dark-mode textarea {
-            background-color: var(--dark-element) !important;
-            color: var(--dark-text) !important;
-            border-color: var(--dark-border) !important;
+        body.dark-mode .card {
+            background-color: var(--dark-card);
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.2);
         }
 
-        body.dark-mode .form-control:focus,
-        body.dark-mode .form-select:focus {
-            border-color: var(--dark-accent);
-            box-shadow: 0 0 0 0.25rem rgba(0, 172, 193, 0.25);
+        body.dark-mode #loading-overlay {
+            background-color: rgba(30, 30, 30, 0.8);
         }
 
-        body.dark-mode .form-control:disabled,
-        body.dark-mode .form-select:disabled {
-            background-color: var(--dark-disabled) !important;
-            color: #aaa !important;
-        }
+        /* Additional Dark Mode Styles (keep your existing dark mode styles) */
+        /* ... */
 
-        /* Interactive Elements */
-        body.dark-mode .dropdown-menu {
-            background-color: var(--dark-element) !important;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-
-        body.dark-mode .dropdown-item {
-            color: var(--dark-text) !important;
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
-
-        body.dark-mode .dropdown-item:hover,
-        body.dark-mode .dropdown-item:focus {
-            background-color: var(--dark-hover) !important;
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
         }
-
-        /* Badges */
-        body.dark-mode .badge.bg-success {
-            background-color: #198754 !important;
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
-        body.dark-mode .badge.bg-warning {
-            background-color: #ffc107 !important;
-            color: #23272b !important;
+        
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: var(--dark-card);
         }
-        body.dark-mode .badge.bg-danger {
-            background-color: #dc3545 !important;
+        
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: #555;
         }
-        body.dark-mode .badge.bg-secondary {
-            background-color: #6c757d !important;
-        }
-
-        /* Text Elements */
-        body.dark-mode .text-muted {
-            color: #aaa !important;
-        }
-
-        body.dark-mode a {
-            color: #7ab4ff !important;
-        }
-
-        body.dark-mode a:hover {
-            color: #9ec6ff !important;
-            text-decoration: underline;
-        }
-
-        /* Transitions */
-        body.dark-mode,
-        body.dark-mode .card,
-        body.dark-mode .table,
-        body.dark-mode .form-control,
-        body.dark-mode .form-select,
-        body.dark-mode .alert,
-        body.dark-mode .dropdown-menu,
-        body.dark-mode .list-group-item {
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* Additional Components */
-        body.dark-mode .nav-tabs .nav-link.active {
-            background-color: var(--dark-element);
-            border-color: var(--dark-border) var(--dark-border) var(--dark-element);
-            color: var(--dark-accent);
-        }
-
-        body.dark-mode .pagination .page-item .page-link {
-            background-color: var(--dark-element);
-            border-color: var(--dark-border);
-            color: var(--dark-text);
-        }
-
-        body.dark-mode .pagination .page-item.active .page-link {
-            background-color: var(--dark-accent);
-            border-color: var(--dark-accent);
+        
+        body.dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: #777;
         }
     </style>
 </head>
@@ -322,6 +250,9 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+
+    <!-- Sidebar Overlay (Mobile Only) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="d-flex">
         <!-- Sidebar -->
@@ -366,11 +297,11 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="main-content flex-grow-1">
+        <div class="main-content flex-grow-1" id="mainContent">
             <!-- Topbar -->
-            <div class="topbar d-flex flex-wrap justify-content-between align-items-center mb-3 border-bottom pb-2 gap-2">
+            <div class="topbar d-flex flex-wrap justify-content-between align-items-center mb-3">
                 <div class="d-flex align-items-center">
-                    <button class="burger-btn me-3" id="toggleSidebar">
+                    <button class="burger-btn" id="toggleSidebar">
                         <i class="fas fa-bars"></i>
                     </button>
                     <nav aria-label="breadcrumb">
@@ -393,6 +324,7 @@
                         @if(auth()->user()->unreadNotificationsCount() > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {{ auth()->user()->unreadNotificationsCount() }}
+                                <span class="visually-hidden">unread notifications</span>
                             </span>
                         @endif
                     </a>
@@ -426,7 +358,7 @@
             <!-- Flash Messages -->
             @foreach (['success', 'error', 'warning', 'info'] as $msg)
                 @if(session($msg))
-                    <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} alert-dismissible fade show mb-3" role="alert">
                         {{ session($msg) }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -448,62 +380,109 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sidebar Toggle
-        const toggleBtn = document.getElementById('toggleSidebar');
-        const appWrapper = document.getElementById('appWrapper');
-        const sidebar = document.getElementById('sidebar');
-
-        toggleBtn?.addEventListener('click', () => {
-            if (window.innerWidth < 768) {
-                sidebar.classList.toggle('sidebar-mobile-show');
-            } else {
-                document.body.classList.toggle('sidebar-hidden');
-            }
-        });
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth < 768 && 
-                !e.target.closest('#sidebar') && 
-                !e.target.closest('#toggleSidebar') &&
-                sidebar.classList.contains('sidebar-mobile-show')) {
-                sidebar.classList.remove('sidebar-mobile-show');
-            }
-        });
-
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        
-        // Check for saved preference
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            darkModeToggle.checked = true;
-        }
-
-        darkModeToggle?.addEventListener('change', () => {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        });
-
-        // Loading overlay
+        // Enhanced Sidebar Toggle Functionality
         document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            
+            // Initialize sidebar state
+            let isMobile = window.innerWidth < 768;
+            
+            // Function to toggle sidebar
+            function toggleSidebar() {
+                if (isMobile) {
+                    sidebar.classList.toggle('sidebar-mobile-show');
+                    sidebarOverlay.classList.toggle('active');
+                    document.body.classList.toggle('sidebar-open');
+                } else {
+                    document.body.classList.toggle('sidebar-hidden');
+                }
+            }
+            
+            // Toggle button click handler
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+            }
+            
+            // Close sidebar when clicking on overlay
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    if (isMobile && sidebar.classList.contains('sidebar-mobile-show')) {
+                        toggleSidebar();
+                    }
+                });
+            }
+            
+            // Close sidebar when clicking on main content (mobile)
+            if (mainContent) {
+                mainContent.addEventListener('click', function() {
+                    if (isMobile && sidebar.classList.contains('sidebar-mobile-show')) {
+                        toggleSidebar();
+                    }
+                });
+            }
+            
+            // Handle window resize
+            function handleResize() {
+                isMobile = window.innerWidth < 768;
+                
+                if (!isMobile) {
+                    // Ensure sidebar is visible on desktop
+                    sidebar.classList.remove('sidebar-mobile-show');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-open');
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            
+            // Dark Mode Toggle
+            if (darkModeToggle) {
+                // Check for saved preference
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                    darkModeToggle.checked = true;
+                }
+                
+                darkModeToggle.addEventListener('change', function() {
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                });
+            }
+            
+            // Loading overlay
+            const loadingOverlay = document.getElementById('loading-overlay');
+            
             // Example: Show loading on form submission
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {
                 form.addEventListener('submit', () => {
-                    document.getElementById('loading-overlay').style.display = 'flex';
+                    if (loadingOverlay) {
+                        loadingOverlay.style.display = 'flex';
+                    }
                 });
             });
+            
+            // Global functions
+            window.showLoading = function() {
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'flex';
+                }
+            };
+            
+            window.hideLoading = function() {
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            };
         });
-
-        // You can call this function manually when needed
-        function showLoading() {
-            document.getElementById('loading-overlay').style.display = 'flex';
-        }
-
-        function hideLoading() {
-            document.getElementById('loading-overlay').style.display = 'none';
-        }
     </script>
 
     @yield('scripts')

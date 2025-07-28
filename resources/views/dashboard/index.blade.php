@@ -143,15 +143,16 @@
                 <h5 class="card-title mb-0">Tren Penjualan (7 Hari Terakhir)</h5>
                 <a href="{{ route('reports.index') }}" class="btn btn-sm btn-outline-info">Lihat Laporan</a>
             </div>
-            <div class="card-body">
-                <canvas id="salesChart" height="100"></canvas>
+            <div class="card-body" style="height: 300px;">
+                <canvas id="salesChart"></canvas>
             </div>
         </div>
     </div>
 </div> -->
 @endsection
 
-<!-- @section('scripts')
+@section('scripts')
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('salesChart').getContext('2d');
@@ -231,5 +232,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script> 
+</script> -->
 @endsection
